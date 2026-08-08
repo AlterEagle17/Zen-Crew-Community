@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zen Crew - Community for Developers</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #111415;
+      --bg-secondary: #0c0f10;
+      --bg-tertiary: #050505;
+      --bg-dark: #1a1a1a;
+      --text-primary: #e1e3e4;
+      --text-secondary: #c7c4d7;
+      --text-muted: #464554;
+      --border-color: #262626;
+      --accent-primary: #c0c1ff;
+      --accent-secondary: #6366f1;
+      --accent-dark: #1000a9;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--bg-primary) 0%, var(--bg-primary) 100%);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Page Container */
+    .page {
+      display: none;
+      width: 100%;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    .page.active {
+      display: flex;
+    }
+
+    /* ========== APPLY PAGE ========== */
+
+    .apply-page {
+      background: linear-gradient(90deg, var(--bg-primary) 0%, var(--bg-primary) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Background shader effect */
+    .bg-shader {
+      position: absolute;
+      inset: 0;
+      opacity: 0.3;
+      pointer-events: none;
+      background: radial-gradient(circle at 40% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 60% 40%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+    }
+
+    .apply-page-content {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      backdrop-filter: blur(12px);
+      background: rgba(17, 20, 21, 0.8);
+      border-bottom: 1px solid rgba(70, 69, 84, 0.1);
+      box-shadow: 0px 0px 40px 0px rgba(99, 102, 241, 0.05);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .nav-brand span {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.48px;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 16px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .nav-back:hover {
+      color: var(--text-primary);
+    }
+
+    /* Main Content Area */
+    .apply-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 76px 24px;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 512px;
+    }
+
+    .header-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 32px;
+    }
+
+    .header-title {
+      font-size: 40px;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: -0.8px;
+      color: var(--text-primary);
+    }
+
+    .header-subtitle {
+      font-size: 18px;
+      text-align: center;
+      color: var(--text-secondary);
+      max-width: 448px;
+      line-height: 1.6;
+    }
+
+    /* Form Card */
+    .form-card {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 57px 41px;
+      box-shadow: 0px 0px 20px rgba(99, 102, 241, 0.05);
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .form-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 15px 45px 15px 45px;
+      font-size: 16px;
+      color: var(--text-primary);
+      font-family: inherit;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-secondary);
+      background: rgba(5, 5, 5, 0.8);
+    }
+
+    .form-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      opacity: 0.7;
+    }
+
+    .icon-user::before {
+      content: "👤";
+      font-size: 16px;
+    }
+
+    .icon-email::before {
+      content: "✉️";
+      font-size: 16px;
+    }
+
+    .icon-phone::before {
+      content: "📞";
+      font-size: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      background: var(--accent-primary);
+      border: none;
+      border-radius: 8px;
+      padding: 16px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent-dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      background: #d5d6ff;
+      transform: translateY(-2px);
+      box-shadow: 0px 8px 24px rgba(192, 193, 255, 0.3);
+    }
+
+    .submit-btn:active:not(:disabled) {
+      transform: translateY(0px);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .submit-btn::after {
+      content: "→";
+      font-size: 14px;
+    }
+
+    /* Security Notice */
+    .security-notice {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      letter-spacing: 1.2px;
+    }
+
+    .security-icon::before {
+      content: "🔒";
+      font-size: 12px;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid rgba(70, 69, 84, 0.1);
+      padding: 49px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .footer-text {
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-link {
+      font-size: 16px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      color: var(--text-primary);
+    }
+
+    /* ========== SUCCESS PAGE ========== */
+
+    .success-page {
+      background: linear-gradient(90deg, var(--bg-primary) 0%, var(--bg-primary) 100%);
+      position: relative;
+      overflow: hidden;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .success-bg-shader {
+      position: absolute;
+      inset: 0;
+      opacity: 0.4;
+      pointer-events: none;
+      background: radial-gradient(circle at 40% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 60% 40%, rgba(99, 102, 241, 0.12) 0%, transparent 50%);
+    }
+
+    .success-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(17, 20, 21, 0.4);
+      pointer-events: none;
+      border-radius: 0;
+    }
+
+    .success-container {
+      position: relative;
+      z-index: 10;
+      max-width: 520px;
+      width: 100%;
+      padding: 24px;
+    }
+
+    .success-card {
+      background: rgba(26, 26, 26, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(70, 69, 84, 0.2);
+      border-radius: 16px;
+      padding: 54px 54px;
+      text-align: center;
+      box-shadow: 0px 0px 30px rgba(99, 102, 241, 0.1);
+    }
+
+    .success-icon-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .success-icon-box {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .success-checkmark {
+      font-size: 48px;
+      animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes scaleIn {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 0.2;
+      }
+      100% {
+        transform: scale(1.3);
+        opacity: 0;
+      }
+    }
+
+    .success-pulse {
+      position: absolute;
+      width: 96px;
+      height: 96px;
+      border: 2px solid var(--accent-secondary);
+      border-radius: 50%;
+      animation: pulse 2s ease-out infinite;
+    }
+
+    .success-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .success-message {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .success-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-secondary);
+      color: white;
+      padding: 16px 32px;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-top: 16px;
+    }
+
+    .success-button:hover {
+      background: #5558e0;
+      transform: translateY(-2px);
+    }
+
+    .success-button::after {
+      content: "→";
+    }
+
+    /* ========== HOME PAGE ========== */
+
+    .home-page {
+      background: linear-gradient(90deg, var(--bg-primary) 0%, var(--bg-primary) 100%);
+    }
+
+    .home-nav {
+      backdrop-filter: blur(12px);
+      background: rgba(17, 20, 21, 0.8);
+      border-bottom: 1px solid rgba(70, 69, 84, 0.1);
+      box-shadow: 0px 0px 40px 0px rgba(99, 102, 241, 0.05);
+      padding: 10px 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .home-nav-brand {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .home-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .home-nav-link {
+      font-size: 16px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .home-nav-link:hover {
+      color: var(--text-primary);
+    }
+
+    .apply-btn {
+      background: var(--accent-primary);
+      color: var(--accent-dark);
+      padding: 12px 24px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .apply-btn:hover {
+      background: #d5d6ff;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      padding: 80px 24px;
+      text-align: center;
+      min-height: 640px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .hero-bg-shape-1 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+      top: 160px;
+      left: 320px;
+      filter: blur(60px);
+    }
+
+    .hero-bg-shape-2 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+      top: 81px;
+      left: 560px;
+      filter: blur(60px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 660px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      letter-spacing: 0.6px;
+    }
+
+    .hero-title {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+      letter-spacing: -1.12px;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-btn-primary {
+      background: var(--accent-secondary);
+      color: white;
+      padding: 16px 32px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-btn-primary:hover {
+      background: #5558e0;
+      transform: translateY(-2px);
+    }
+
+    .hero-btn-primary::after {
+      content: "→";
+    }
+
+    .hero-btn-secondary {
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 16px 32px;
+      border-radius: 8px;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .hero-btn-secondary:hover {
+      border-color: var(--accent-secondary);
+      color: var(--text-primary);
+    }
+
+    /* About Section */
+    .about {
+      padding: 80px 24px;
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .section-title {
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 48px;
+      color: var(--text-primary);
+    }
+
+    .section-title-line {
+      display: inline-block;
+      width: 80px;
+      height: 4px;
+      background: var(--accent-secondary);
+      margin-top: 8px;
+      border-radius: 2px;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .about-card {
+      background: rgba(26, 26, 26, 0.6);
+      border: 1px solid rgba(70, 69, 84, 0.2);
+      border-radius: 12px;
+      padding: 33px;
+      backdrop-filter: blur(10px);
+    }
+
+    .about-card-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    .about-card-text {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+
+    /* CTA Section */
+    .cta {
+      margin: 80px 24px;
+      max-width: 1232px;
+      margin-left: auto;
+      margin-right: auto;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0.1) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 16px;
+      padding: 80px 81px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 32px;
+      color: var(--text-primary);
+    }
+
+    .cta-text {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .cta-button {
+      background: var(--accent-secondary);
+      color: white;
+      padding: 16px 32px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cta-button:hover {
+      background: #5558e0;
+      transform: translateY(-2px);
+    }
+
+    .cta-button::after {
+      content: "→";
+    }
+
+    /* Home Footer */
+    .home-footer {
+      background: var(--bg-secondary);
+      padding: 80px 24px;
+      margin-top: 40px;
+      border-top: 1px solid rgba(70, 69, 84, 0.1);
+    }
+
+    .home-footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .home-footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+
+    .home-footer-brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .home-footer-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .home-footer-copyright {
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+
+    .home-footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .home-footer-link {
+      font-size: 16px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .home-footer-link:hover {
+      color: var(--text-primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .form-container {
+        max-width: 100%;
+      }
+
+      .header-title {
+        font-size: 28px;
+      }
+
+      .hero-title {
+        font-size: 36px;
+      }
+
+      .hero-subtitle {
+        font-size: 16px;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+      }
+
+      .hero-btn-primary,
+      .hero-btn-secondary {
+        width: 100%;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta {
+        padding: 40px 24px;
+      }
+
+      .cta-title {
+        font-size: 28px;
+      }
+
+      .home-footer-top {
+        flex-direction: column;
+      }
+
+      .home-nav-links {
+        display: none;
+      }
+
+      .top-nav {
+        padding: 0 16px;
+      }
+
+      .apply-main {
+        padding: 40px 16px;
+      }
+
+      .form-card {
+        padding: 32px 24px;
+      }
+    }
+
+    /* Toast Notifications */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(26, 26, 26, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(70, 69, 84, 0.2);
+      border-radius: 8px;
+      padding: 16px 24px;
+      font-size: 14px;
+      z-index: 1000;
+      animation: slideInUp 0.3s ease;
+    }
+
+    .toast.success {
+      border-color: rgba(76, 175, 80, 0.3);
+      color: #4caf50;
+    }
+
+    .toast.error {
+      border-color: rgba(244, 67, 54, 0.3);
+      color: #f44336;
+    }
+
+    @keyframes slideInUp {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- APPLY PAGE -->
+<div class="page apply-page">
+  <div class="bg-shader"></div>
+  <div class="apply-page-content">
+    <nav class="top-nav">
+      <a href="#" class="nav-brand">
+        <span>ZEN CREW</span>
+      </a>
+      <a href="#" class="nav-back" onclick="showPage('home'); return false;">
+        ← Back
+      </a>
+    </nav>
+
+    <div class="apply-main">
+      <div class="form-container">
+        <div class="header-section">
+          <h1 class="header-title">Apply to Zen Crew</h1>
+          <p class="header-subtitle">Think Zen Crew is for you? Submit your application.<br>It only takes a minute.</p>
+        </div>
+
+        <div class="form-card">
+          <form class="form-group" id="applicationForm">
+            <!-- Full Name -->
+            <div class="form-field">
+              <label class="form-label">Full Name</label>
+              <div class="form-input-wrapper">
+                <div class="form-icon icon-user"></div>
+                <input 
+                  type="text" 
+                  class="form-input" 
+                  id="fullName" 
+                  placeholder="Your full name" 
+                  required
+                >
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-field">
+              <label class="form-label">Email Address</label>
+              <div class="form-input-wrapper">
+                <div class="form-icon icon-email"></div>
+                <input 
+                  type="email" 
+                  class="form-input" 
+                  id="email" 
+                  placeholder="email@example.com" 
+                  required
+                >
+              </div>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-field">
+              <label class="form-label">Phone Number</label>
+              <div class="form-input-wrapper">
+                <div class="form-icon icon-phone"></div>
+                <input 
+                  type="tel" 
+                  class="form-input" 
+                  id="phone" 
+                  placeholder="+91 ***********" 
+                  required
+                >
+              </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+              Submit Application
+            </button>
+          </form>
+        </div>
+
+        <div class="security-notice">
+          <div class="security-icon"></div>
+          <span>Your information is secure and encrypted.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-text">© 2024 Zen Crew. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="#" class="footer-link">Privacy Policy</a>
+      <a href="#" class="footer-link">Terms of Service</a>
+    </div>
+  </footer>
+</div>
+
+<!-- SUCCESS PAGE -->
+<div class="page success-page">
+  <div class="success-bg-shader"></div>
+  <div class="success-overlay"></div>
+  <div class="success-container">
+    <div class="success-card">
+      <div class="success-icon-wrapper">
+        <div class="success-icon-box">
+          <div class="success-pulse"></div>
+          <div class="success-checkmark">✓</div>
+        </div>
+      </div>
+      <h2 class="success-title">Application Submitted</h2>
+      <p class="success-message">
+        Your application has been received successfully. We'll review it and get back to you within 3-5 business days.
+      </p>
+      <button class="success-button" onclick="showPage('home');">
+        Back to Home
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- HOME PAGE -->
+<div class="page home-page active">
+  <nav class="home-nav">
+    <div class="home-nav-brand">ZEN CREW</div>
+    <div class="home-nav-links">
+      <a href="#" class="home-nav-link">About</a>
+      <a href="#" class="home-nav-link">Features</a>
+      <a href="#" class="home-nav-link">Community</a>
+      <a href="#" class="home-nav-link">Pricing</a>
+      <button class="apply-btn" onclick="showPage('apply'); return false;">Apply Now</button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-bg-shape-1"></div>
+      <div class="hero-bg-shape-2"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">✨ Join Our Community</div>
+      <h1 class="hero-title">A Crew Built for Modern Developers</h1>
+      <p class="hero-subtitle">
+        Connect, collaborate, and grow with developers who share your passion for building amazing things.
+      </p>
+      <div class="hero-buttons">
+        <button class="hero-btn-primary" onclick="showPage('apply'); return false;">Get Started</button>
+        <button class="hero-btn-secondary">Learn More</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about">
+    <div>
+      <h2 class="section-title">More Than Just a Community</h2>
+      <div class="section-title-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-card">
+        <h3 class="about-card-title">Collaborative Growth</h3>
+        <p class="about-card-text">
+          Here, technical precision meets a welcoming atmosphere. Whether you're debugging a complex architecture or sharing your first side project, you'll find a crew ready to support your growth.
+        </p>
+      </div>
+      <div class="about-card">
+        <h3 class="about-card-title">Expert Mentorship</h3>
+        <p class="about-card-text">
+          Connect with seasoned developers who've been where you are. Get guidance, share knowledge, and accelerate your journey from junior to senior engineer.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <h2 class="cta-title">Ready to Join Zen Crew?</h2>
+    <p class="cta-text">
+      Become part of a community that values learning, growth, and collaboration. Your application takes just one minute.
+    </p>
+    <button class="cta-button" onclick="showPage('apply'); return false;">
+      Apply to Zen Crew
+    </button>
+  </section>
+
+  <!-- Footer -->
+  <footer class="home-footer">
+    <div class="home-footer-content">
+      <div class="home-footer-top">
+        <div class="home-footer-brand">
+          <h3 class="home-footer-title">ZEN CREW</h3>
+          <p class="home-footer-copyright">© 2024 Zen Crew. All rights reserved.</p>
+        </div>
+        <div class="home-footer-links">
+          <a href="#" class="home-footer-link">Privacy Policy</a>
+          <a href="#" class="home-footer-link">Terms of Service</a>
+          <a href="#" class="home-footer-link">Code of Conduct</a>
+          <a href="#" class="home-footer-link">Join Discord</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+// Configuration
+const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZdv1Tc7T59BBLu3vrYdmp4swoVia4YQmU_dHWNkPreQzupAAqE6cxAd3-QZpA9hH_/exec';
+
+// Page Navigation
+function showPage(pageName) {
+  const pages = document.querySelectorAll('.page');
+  pages.forEach(page => page.classList.remove('active'));
+  
+  if (pageName === 'apply') {
+    document.querySelector('.apply-page').classList.add('active');
+  } else if (pageName === 'success') {
+    document.querySelector('.success-page').classList.add('active');
+  } else if (pageName === 'home') {
+    document.querySelector('.home-page').classList.add('active');
+  }
+}
+
+// Form Submission
+const form = document.getElementById('applicationForm');
+const submitBtn = document.getElementById('submitBtn');
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const fullName = document.getElementById('fullName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+
+  // Validation
+  if (!fullName || !email || !phone) {
+    showToast('Please fill in all fields', 'error');
+    return;
+  }
+
+  // Submit form
+  submitForm(fullName, email, phone);
+});
+
+function submitForm(name, email, phone) {
+  // Disable button during submission
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
+
+  // Build URL with GET parameters
+  const url = APPSCRIPT_URL + '?' + new URLSearchParams({
+    name: name,
+    email: email,
+    phone: phone
+  });
+
+  // Fetch with GET and no-cors
+  fetch(url, {
+    method: 'GET',
+    mode: 'no-cors'
+  })
+    .then(() => {
+      // Success - no response parsing needed with no-cors
+      showToast('Application submitted successfully!', 'success');
+      
+      // Clear form
+      form.reset();
+      
+      // Wait 1 second then show success page
+      setTimeout(() => {
+        showPage('success');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Application';
+      }, 1000);
+    })
+    .catch(() => {
+      // Error handling
+      showToast('There was an error submitting your application. Please try again.', 'error');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Application';
+    });
+}
+
+// Toast Notification
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 4000);
+}
+
+// Email validation
+document.getElementById('email').addEventListener('change', function() {
+  const email = this.value.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (email && !emailRegex.test(email)) {
+    showToast('Please enter a valid email address', 'error');
+  }
+});
+</script>
+
+</body>
+</html>
