@@ -493,10 +493,12 @@
       border-bottom: 1px solid rgba(70, 69, 84, 0.1);
       box-shadow: 0px 0px 40px 0px rgba(99, 102, 241, 0.05);
       padding: 10px 24px;
-      height: 60px;
+      min-height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
     .home-nav-brand {
@@ -823,6 +825,201 @@
 
     /* Responsive */
     @media (max-width: 768px) {
+      body {
+        background: #111621;
+      }
+
+      .home-page {
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+        min-height: 100vh;
+        background: rgba(15, 19, 26, 0.98);
+        border-left: 1px solid rgba(105, 135, 180, 0.2);
+        border-right: 1px solid rgba(105, 135, 180, 0.2);
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .home-nav {
+        padding: 14px 16px 12px;
+        min-height: auto;
+        justify-content: center;
+        border-bottom: 1px solid rgba(99, 102, 241, 0.18);
+      }
+
+      .home-nav-brand {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+      }
+
+      .home-nav-links {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0;
+        margin-top: 8px;
+        flex-wrap: nowrap;
+      }
+
+      .home-nav-link {
+        font-size: 14px;
+        color: #dde4ff;
+      }
+
+      .apply-btn {
+        width: 100%;
+        height: 52px;
+        padding: 12px 18px;
+        border-radius: 10px;
+        margin-top: 10px;
+        font-size: 18px;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 18px 18px 12px;
+        overflow: visible;
+      }
+
+      .hero-bg {
+        display: none;
+      }
+
+      .hero-content {
+        max-width: 100%;
+        text-align: left;
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        padding: 8px 12px;
+        margin-bottom: 18px;
+      }
+
+      .hero-title {
+        font-size: 56px;
+        line-height: 0.9;
+        letter-spacing: -0.08em;
+        margin-bottom: 20px;
+      }
+
+      .hero-subtitle {
+        font-size: 17px;
+        line-height: 1.45;
+        margin-bottom: 24px;
+        color: #d9def8;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .hero-btn-primary,
+      .hero-btn-secondary {
+        width: 100%;
+        justify-content: center;
+        border-radius: 10px;
+        padding: 16px 20px;
+        font-size: 18px;
+      }
+
+      .about {
+        padding: 26px 18px 18px;
+      }
+
+      .section-title {
+        font-size: 58px;
+        line-height: 0.9;
+        letter-spacing: -0.08em;
+        margin-bottom: 16px;
+        max-width: 320px;
+      }
+
+      .section-title-line {
+        width: 70px;
+        margin-top: 0;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .about-card {
+        padding: 22px 18px;
+        border-radius: 10px;
+      }
+
+      .about-card-title {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+
+      .about-card-text {
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .cta {
+        margin: 18px 18px 0;
+        padding: 28px 20px;
+        border-radius: 12px;
+      }
+
+      .cta-title {
+        font-size: 28px;
+        margin-bottom: 18px;
+      }
+
+      .cta-text {
+        font-size: 15px;
+        margin-bottom: 24px;
+      }
+
+      .cta-button {
+        width: 100%;
+        justify-content: center;
+        border-radius: 10px;
+        padding: 16px 20px;
+      }
+
+      .home-footer {
+        padding: 26px 18px 22px;
+        margin-top: 18px;
+      }
+
+      .home-footer-top {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+
+      .home-footer-title {
+        font-size: 20px;
+        margin-bottom: 12px;
+      }
+
+      .home-footer-copyright {
+        font-size: 14px;
+      }
+
+      .home-footer-links {
+        flex-wrap: wrap;
+        gap: 10px 14px;
+      }
+
+      .home-footer-link {
+        font-size: 14px;
+      }
+
       .form-row {
         grid-template-columns: 1fr;
       }
@@ -835,45 +1032,21 @@
         font-size: 28px;
       }
 
-      .hero-title {
-        font-size: 36px;
-      }
-
-      .hero-subtitle {
+      .header-subtitle {
         font-size: 16px;
-      }
-
-      .hero-buttons {
-        flex-direction: column;
-      }
-
-      .hero-btn-primary,
-      .hero-btn-secondary {
-        width: 100%;
-      }
-
-      .about-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .cta {
-        padding: 40px 24px;
-      }
-
-      .cta-title {
-        font-size: 28px;
-      }
-
-      .home-footer-top {
-        flex-direction: column;
-      }
-
-      .home-nav-links {
-        display: none;
       }
 
       .top-nav {
         padding: 0 16px;
+        height: 56px;
+      }
+
+      .nav-brand span {
+        font-size: 20px;
+      }
+
+      .nav-back {
+        font-size: 14px;
       }
 
       .apply-main {
@@ -881,7 +1054,109 @@
       }
 
       .form-card {
-        padding: 32px 24px;
+        padding: 28px 18px;
+        border-radius: 12px;
+      }
+
+      .submit-btn {
+        padding: 14px 18px;
+      }
+
+      .footer {
+        padding: 28px 20px;
+      }
+
+      .footer-links {
+        width: 100%;
+        justify-content: space-between;
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .home-page {
+        max-width: 360px;
+      }
+
+      .home-nav {
+        padding: 12px 14px 10px;
+      }
+
+      .home-nav-links {
+        gap: 6px;
+      }
+
+      .home-nav-link {
+        font-size: 12px;
+      }
+
+      .hero-title {
+        font-size: 44px;
+      }
+
+      .section-title {
+        font-size: 48px;
+        max-width: 280px;
+      }
+
+      .hero-btn-primary,
+      .hero-btn-secondary,
+      .apply-btn,
+      .cta-button {
+        font-size: 16px;
+      }
+
+      .apply-btn {
+        padding: 12px 14px;
+      }
+
+      .hero-badge {
+        font-size: 11px;
+        padding: 7px 12px;
+      }
+
+      .header-title {
+        font-size: 24px;
+      }
+
+      .header-subtitle {
+        font-size: 15px;
+      }
+
+      .form-input {
+        padding: 14px 14px 14px 42px;
+        font-size: 15px;
+      }
+
+      .form-icon {
+        left: 12px;
+      }
+
+      .security-notice {
+        font-size: 11px;
+        letter-spacing: 0.8px;
+      }
+
+      .success-card {
+        padding: 32px 20px;
+      }
+
+      .success-title {
+        font-size: 26px;
+      }
+
+      .success-message {
+        font-size: 14px;
+      }
+
+      .success-button {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
 
