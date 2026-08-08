@@ -11,13 +11,13 @@ The website keeps the joining process simple and straightforward.
 ## 🚀 User Flow
 
 Landing Page
-     ↓
+     ->
 Join Discord
-     ↓
+     ->
 Explore Community
-     ↓
+     ->
 Application
-     ↓
+     ->
 Submit Application
-     ↓
+     ->
 Application Received
