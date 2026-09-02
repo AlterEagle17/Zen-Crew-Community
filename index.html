@@ -1,518 +1,594 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Zen Crew — A Crew Built for Modern Developers</title>
-<style>
-  :root{
-    --bg-deep:#05060a;
-    --bg-navy:#0a0e1a;
-    --cyan:#4fd8ff;
-    --indigo:#6c63ff;
-    --purple:#a855f7;
-    --glass-bg: rgba(255,255,255,0.045);
-    --glass-bg-strong: rgba(255,255,255,0.07);
-    --glass-border: rgba(255,255,255,0.10);
-    --text-main:#e9edf6;
-    --text-dim:#9aa4ba;
-    --radius: 20px;
-    --ease: cubic-bezier(.22,1,.36,1);
-    --dur: .35s;
+<!doctype html> <html lang="en"> <head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"> <title> Zen Crew — 3D Swipe </title> <style> :root  {
+  --bg:#03060b;
+  --glass:#ffffff0a;
+  --line:#ffffff18;
+  --text:#f5f7ff;
+  --muted:#9ba8bf;
+  --cyan:#58e7ff;
+  --indigo:#7077ff;
+  --purple:#b05cff;
+  --ease:cubic-bezier(.16,1,.3,1)
+}
+*  {
+  box-sizing:border-box
+}
+html,body  {
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;
+  overflow-x:hidden
+}
+button,input  {
+  font:inherit
+}
+button  {
+  cursor:pointer
+}
+a  {
+  text-decoration:none;
+  color:inherit
+}
+body  {
+  background:radial-gradient(circle at 15% 10%,#12344b 0,transparent 30%),radial-gradient(circle at 85% 15%,#2b1850 0,transparent 32%),linear-gradient(145deg,#02050a,#08111d 55%,#03050a)
+}
+body:before  {
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  opacity:.16;
+  background-image:linear-gradient(#58e7ff24 1px,transparent 1px),linear-gradient(90deg,#58e7ff24 1px,transparent 1px);
+  background-size:55px 55px;
+  transform:perspective(700px) rotateX(62deg) scale(1.5);
+  transform-origin:center bottom;
+  mask-image:linear-gradient(black,transparent 75%);
+  animation:grid 18s linear infinite
+}
+@keyframes grid  {
+  to  {
+    background-position:0 550px
   }
+}
+.orb  {
+  position:fixed;
+  border-radius:50%;
+  filter:blur(75px);
+  pointer-events:none;
+  z-index:-1;
+  opacity:.35
+}
+.orb.a  {
+  width:300px;
+  height:300px;
+  background:#16dfff;
+  left:-120px;
+  top:25%
+}
+.orb.b  {
+  width:340px;
+  height:340px;
+  background:#713cff;
+  right:-140px;
+  bottom:5%
+}
+.nav  {
+  position:fixed;
+  z-index:20;
+  top:0;
+  left:0;
+  right:0;
+  padding:12px clamp(10px,4vw,36px);
+  pointer-events:none
+}
+.navin  {
+  max-width:1180px;
+  margin:auto;
+  padding:10px 12px 10px 18px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#050a12aa;
+  backdrop-filter:blur(20px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  pointer-events:auto;
+  box-shadow:0 20px 60px #0008,inset 0 1px #fff2
+}
+.logo  {
+  font-weight:900;
+  letter-spacing:.04em
+}
+.logo b  {
+  color:var(--cyan)
+}
+.navlinks  {
+  display:flex;
+  gap:8px
+}
+.btn  {
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--glass);
+  color:var(--text);
+  padding:11px 18px;
+  min-height:46px;
+  transition:.35s var(--ease);
+  box-shadow:inset 0 1px #fff1,0 10px 30px #0005
+}
+.btn:hover  {
+  transform:translateY(-3px);
+  box-shadow:0 18px 40px #0008,0 0 25px #58e7ff1a
+}
+.primary  {
+  border:0;
+  background:linear-gradient(135deg,var(--cyan),var(--indigo));
+  color:#031019;
+  font-weight:800
+}
+.viewport  {
+  min-height:100svh;
+  padding:105px 14px 55px;
+  display:grid;
+  place-items:center;
+  perspective:1600px;
+  touch-action:pan-y
+}
+.deck  {
+  width:min(1100px,100%);
+  transform-style:preserve-3d
+}
+.page  {
+  display:none;
+  transform-style:preserve-3d
+}
+.page.active  {
+  display:block
+}
+.page.enter-left  {
+  animation:enterLeft .65s var(--ease)
+}
+.page.enter-right  {
+  animation:enterRight .65s var(--ease)
+}
+@keyframes enterLeft  {
+  from  {
+    opacity:0;
+    transform:translate3d(100px,0,-180px) rotateY(-16deg)
+  }
+  to  {
+    opacity:1;
+    transform:none
+  }
+}
+@keyframes enterRight  {
+  from  {
+    opacity:0;
+    transform:translate3d(-100px,0,-180px) rotateY(16deg)
+  }
+  to  {
+    opacity:1;
+    transform:none
+  }
+}
+.hero  {
+  min-height:590px;
+  display:grid;
+  place-items:center;
+  position:relative;
+  perspective:1300px
+}
+.heroCard  {
+  width:min(860px,100%);
+  padding:clamp(38px,7vw,82px) clamp(20px,7vw,80px);
+  text-align:center;
+  border:1px solid var(--line);
+  border-radius:34px;
+  background:linear-gradient(145deg,#ffffff12,#ffffff03);
+  backdrop-filter:blur(20px);
+  box-shadow:0 55px 110px #000b,inset 0 1px #fff2;
+  transform-style:preserve-3d;
+  transition:transform .12s ease;
+  position:relative
+}
+.heroCard:after  {
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  pointer-events:none;
+  background:linear-gradient(115deg,transparent 20%,#58e7ff33 48%,transparent 70%);
+  filter:blur(16px);
+  animation:sheen 5s linear infinite
+}
+@keyframes sheen  {
+  from  {
+    transform:translateX(-100%)
+  }
+  to  {
+    transform:translateX(100%)
+  }
+}
+.badge  {
+  display:inline-flex;
+  border:1px solid #58e7ff44;
+  background:#58e7ff0b;
+  color:var(--cyan);
+  padding:8px 14px;
+  border-radius:99px;
+  font-size:.78rem;
+  letter-spacing:.08em
+}
+.hero h1  {
+  font-size:clamp(2.6rem,7vw,5.8rem);
+  line-height:.95;
+  letter-spacing:-.065em;
+  margin:24px 0 20px;
+  background:linear-gradient(120deg,#fff 25%,#b8f4ff 55%,#9288ff);
+  -webkit-background-clip:text;
+  color:transparent
+}
+.hero p  {
+  max-width:650px;
+  margin:auto;
+  color:var(--muted);
+  font-size:clamp(1rem,2vw,1.2rem);
+  line-height:1.7
+}
+.actions  {
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:30px
+}
+.float  {
+  position:absolute;
+  padding:13px 17px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#0a1422aa;
+  backdrop-filter:blur(14px);
+  box-shadow:0 25px 55px #0009,inset 0 1px #fff1;
+  color:#cbd6e8;
+  font-size:.8rem;
+  animation:float 5s ease-in-out infinite
+}
+.f1  {
+  left:1%;
+  top:14%;
+  transform:translateZ(100px) rotateY(17deg)
+}
+.f2  {
+  right:1%;
+  top:25%;
+  transform:translateZ(80px) rotateY(-17deg);
+  animation-delay:1s
+}
+.f3  {
+  left:5%;
+  bottom:13%;
+  transform:translateZ(55px) rotateY(12deg);
+  animation-delay:2s
+}
+@keyframes float  {
+  50%  {
+    translate:0 -13px
+  }
+}
+.section  {
+  padding:20px 0 60px
+}
+.section h2  {
+  text-align:center;
+  font-size:clamp(1.8rem,4vw,3rem);
+  margin:0 0 28px
+}
+.cards  {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+  perspective:1100px
+}
+.card  {
+  padding:30px;
+  border:1px solid var(--line);
+  border-radius:26px;
+  background:var(--glass);
+  backdrop-filter:blur(18px);
+  box-shadow:0 30px 65px #0008,inset 0 1px #fff2;
+  transition:transform .15s var(--ease),box-shadow .3s;
+  transform-style:preserve-3d
+}
+.card:hover  {
+  box-shadow:0 40px 80px #000a,0 0 35px #58e7ff19
+}
+.icon  {
+  font-size:2rem;
+  margin-bottom:14px
+}
+.card h3  {
+  margin:0 0 8px
+}
+.card p,.cta p  {
+  margin:0;
+  color:var(--muted);
+  line-height:1.7
+}
+.cta  {
+  text-align:center;
+  margin-top:20px;
+  padding:45px 24px;
+  border:1px solid #58e7ff22;
+  border-radius:30px;
+  background:linear-gradient(135deg,#58e7ff0c,#a65cff0c);
+  box-shadow:0 35px 75px #0008
+}
+.footer  {
+  text-align:center;
+  color:var(--muted);
+  font-size:.78rem;
+  padding:25px
+}
+.formWrap  {
+  min-height:72svh;
+  display:grid;
+  place-items:center;
+  perspective:1300px
+}
+.panel  {
+  width:min(480px,100%);
+  padding:clamp(26px,6vw,46px);
+  border:1px solid var(--line);
+  border-radius:29px;
+  background:#ffffff0b;
+  backdrop-filter:blur(22px);
+  box-shadow:0 45px 100px #000b,inset 0 1px #fff2;
+  transform-style:preserve-3d
+}
+.panel h2  {
+  text-align:center;
+  margin:0 0 8px;
+  font-size:clamp(1.7rem,4vw,2.3rem)
+}
+.sub  {
+  text-align:center;
+  color:var(--muted);
+  line-height:1.6;
+  margin:0 0 25px
+}
+.field  {
+  margin-bottom:17px
+}
+.field label  {
+  display:block;
+  color:#bdc9dd;
+  font-size:.78rem;
+  margin-bottom:7px
+}
+.field input  {
+  width:100%;
+  height:51px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:#02071199;
+  color:var(--text);
+  padding:0 14px;
+  outline:none;
+  box-shadow:inset 0 3px 10px #0008;
+  transition:.3s
+}
+.field input:focus  {
+  border-color:var(--cyan);
+  box-shadow:0 0 0 3px #58e7ff18,0 0 25px #58e7ff16
+}
+.full  {
+  width:100%
+}
+.secure  {
+  text-align:center;
+  color:var(--muted);
+  font-size:.74rem;
+  margin:15px 0 0
+}
+.success  {
+  text-align:center
+}
+.check  {
+  width:94px;
+  height:94px;
+  margin:0 auto 20px;
+  border:1px solid #58e7ff66;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:var(--cyan);
+  font-size:3rem;
+  box-shadow:0 0 55px #58e7ff25,inset 0 0 30px #58e7ff0d;
+  animation:pop .8s var(--ease)
+}
+@keyframes pop  {
+  from  {
+    opacity:0;
+    transform:scale(.2) rotateY(180deg)
+  }
+  to  {
+    opacity:1;
+    transform:none
+  }
+}
+.swipeHint  {
+  position:fixed;
+  bottom:16px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+  color:#74829b;
+  font-size:.68rem;
+  letter-spacing:.1em;
+  white-space:nowrap
+}
+.swipeHint b  {
+  color:#b7c4d9
+}
+@media(max-width:700px)  {
+  .nav  {
+    padding:8px
+  }
+  .navin  {
+    border-radius:15px;
+    padding:9px 10px 9px 13px
+  }
+  .btn  {
+    padding:10px 13px;
+    font-size:.82rem
+  }
+  .viewport  {
+    padding:88px 11px 45px
+  }
+  .hero  {
+    min-height:530px
+  }
+  .heroCard  {
+    border-radius:25px;
+    padding:44px 18px
+  }
+  .float  {
+    display:none
+  }
+  .cards  {
+    grid-template-columns:1fr
+  }
+  .card  {
+    padding:24px
+  }
+  .section  {
+    padding-bottom:45px
+  }
+}
+@media(max-width:420px)  {
+  .navlinks .btn:first-child  {
+    display:none
+  }
+  .hero h1  {
+    font-size:clamp(2.35rem,13vw,3.3rem)
+  }
+  .actions  {
+    flex-direction:column
+  }
+  .actions .btn  {
+    width:100%
+  }
+  .panel  {
+    padding:25px 18px
+  }
+}
+@media(prefers-reduced-motion:reduce)  {
+  *,*:before,*:after  {
+    animation:none!important;
+    transition:none!important
+  }
+  .swipeHint  {
+    display:none
+  }
+}
+</style> </head> <body> <div class="orb a"> </div> <div class="orb b"> </div> <nav class="nav"> <div class="navin"> <a class="logo" href="#" onclick="showPage('home');
+return false"> ZEN <b> CREW </b> </a> <div class="navlinks"> <button class="btn" onclick="showPage('home')"> Home </button> <button class="btn primary" onclick="showPage('apply')"> Apply </button> </div> </div> </nav> <main class="viewport" id="viewport"> <div class="deck"> <section class="page active" id="page-home"> <div class="hero" id="hero"> <div class="float f1"> &lt;
+/&gt;
+clean code </div> <div class="float f2"> 🚀 ship faster </div> <div class="float f3"> 🤝 grow together </div> <div class="heroCard" id="heroCard"> <span class="badge"> ✦ JOIN OUR COMMUNITY </span> <h1> A Crew Built for Modern Developers </h1> <p> Connect, collaborate, and grow with developers who share your passion for building amazing things. </p> <div class="actions"> <button class="btn primary" onclick="showPage('apply')"> Get Started → </button> <button class="btn" onclick="document.getElementById('about').scrollIntoView( {
+behavior:'smooth'}
 
-  *{ box-sizing:border-box; }
-  html,body{ margin:0; padding:0; }
-  body{
-    min-height:100vh;
-    width:100%;
-    overflow-x:hidden;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
-    color: var(--text-main);
-    background:
-      radial-gradient(circle at 15% 0%, rgba(108,99,255,.18), transparent 55%),
-      radial-gradient(circle at 85% 8%, rgba(79,216,255,.14), transparent 55%),
-      radial-gradient(circle at 50% 100%, rgba(168,85,247,.10), transparent 60%),
-      linear-gradient(180deg, #05060a 0%, #0a0e1a 45%, #05060a 100%);
-    background-attachment: fixed;
-    line-height:1.5;
-  }
-  h1,h2,h3,p{ margin:0; }
-  button{ font-family:inherit; }
-  a{ color:inherit; text-decoration:none; }
+)"> Explore Crew </button> </div> </div> </div> <section class="section" id="about"> <h2> More Than Just a Community </h2> <div class="cards"> <article class="card tilt"> <div class="icon"> 🤝 </div> <h3> Collaborative Growth </h3> <p> Technical precision meets a welcoming atmosphere. Build, debug and share with people who support your growth. </p> </article> <article class="card tilt"> <div class="icon"> 🧭 </div> <h3> Expert Mentorship </h3> <p> Connect with experienced developers, share knowledge and accelerate your journey from junior to senior. </p> </article> </div> </section> <section class="cta"> <h2> Ready to Join Zen Crew? </h2> <p> Become part of a community that values learning, growth and collaboration. </p> <div class="actions"> <button class="btn primary" onclick="showPage('apply')"> Apply to Zen Crew → </button> </div> </section> <footer class="footer"> © 2026 Zen Crew. All rights reserved. </footer> </section> <section class="page" id="page-apply"> <div class="formWrap"> <div class="panel"> <h2> Apply to Zen Crew </h2> <p class="sub"> Think Zen Crew is for you? Submit your application. It only takes a minute. </p> <form id="applicationForm" onsubmit="return submitForm(event)"> <div class="field"> <label for="fullName"> FULL NAME </label> <input id="fullName" name="fullName" autocomplete="name" required> </div> <div class="field"> <label for="email"> EMAIL ADDRESS </label> <input id="email" name="email" type="email" autocomplete="email" required> </div> <div class="field"> <label for="phone"> PHONE NUMBER </label> <input id="phone" name="phone" type="tel" autocomplete="tel" required> </div> <button class="btn primary full" id="submitBtn" type="submit"> Submit Application → </button> <p class="secure"> 🔒 Your information is secure and encrypted. </p> </form> </div> </div> </section> <section class="page" id="page-success"> <div class="formWrap"> <div class="panel success"> <div class="check"> ✓ </div> <h2> Application Submitted </h2> <p class="sub"> Your application has been received successfully. We'll review it and get back to you within 3–5 business days. </p> <button class="btn primary" onclick="showPage('home')"> Back to Home → </button> </div> </div> </section> </div> </main> <div class="swipeHint"> SWIPE <b> ← → </b> TO NAVIGATE </div> <script> /* KEEP YOUR EXISTING BACKEND URL. */ const APPSCRIPT_URL="YOUR_EXISTING_APPS_SCRIPT_URL_HERE";
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let current='home';
+function showPage(id) {
+  const old=document.querySelector('.page.active'),target=document.getElementById('page-'+id);
+  if(!target||target===old)return;
+  const order=['home','apply','success'],dir=order.indexOf(id)>order.indexOf(current)?'enter-left':'enter-right';
+  if(old)old.classList.remove('active');
+  target.classList.remove('enter-left','enter-right');
+  void target.offsetWidth;
+  target.classList.add('active',dir);
+  current=id;
+  scrollTo( {
+  top:0,behavior:reduced?'auto':'smooth'}
 
-  /* ---------- Background scene ---------- */
-  .bg-scene{
-    position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden;
-  }
-  .grid-layer{
-    position:absolute; inset:-20% -20% -20% -20%;
-    background-image:
-      linear-gradient(rgba(108,99,255,.14) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(108,99,255,.14) 1px, transparent 1px);
-    background-size: 48px 48px;
-    transform: perspective(600px) rotateX(58deg) translateZ(0);
-    opacity:.35;
-    animation: gridDrift 18s linear infinite;
-  }
-  @keyframes gridDrift{
-    from{ background-position: 0 0; }
-    to{ background-position: 0 480px; }
-  }
-  .glow{ position:absolute; border-radius:50%; filter: blur(0px); }
-  .glow-1{ width:40vw; height:40vw; top:-10%; left:-10%; background: radial-gradient(circle, rgba(79,216,255,.16), transparent 70%); }
-  .glow-2{ width:36vw; height:36vw; bottom:-15%; right:-10%; background: radial-gradient(circle, rgba(168,85,247,.14), transparent 70%); }
+)}
 
-  .particles span{
-    position:absolute; width:4px; height:4px; border-radius:50%;
-    background: var(--cyan);
-    box-shadow: 0 0 8px 2px rgba(79,216,255,.6);
-    opacity:.5;
-    animation: floatUp 12s linear infinite;
-  }
-  .particles span:nth-child(1){ left:8%;  top:80%; animation-duration:14s; animation-delay:0s; }
-  .particles span:nth-child(2){ left:22%; top:90%; animation-duration:11s; animation-delay:1s; background:var(--indigo); box-shadow:0 0 8px 2px rgba(108,99,255,.6);}
-  .particles span:nth-child(3){ left:40%; top:85%; animation-duration:16s; animation-delay:2s; }
-  .particles span:nth-child(4){ left:58%; top:92%; animation-duration:13s; animation-delay:.5s; background:var(--purple); box-shadow:0 0 8px 2px rgba(168,85,247,.6);}
-  .particles span:nth-child(5){ left:74%; top:88%; animation-duration:15s; animation-delay:1.5s; }
-  .particles span:nth-child(6){ left:90%; top:82%; animation-duration:12s; animation-delay:2.5s; }
-  @keyframes floatUp{
-    0%{ transform: translateY(0); opacity:0; }
-    10%{ opacity:.6; }
-    90%{ opacity:.4; }
-    100%{ transform: translateY(-100vh); opacity:0; }
-  }
+if(!reduced&&matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  const hero=document.getElementById('hero'),card=document.getElementById('heroCard');
+  hero.addEventListener('pointermove',e=> {
+    const r=hero.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`rotateY($ {
+    x*8}
 
-  /* ---------- Navbar ---------- */
-  .navbar{
-    position: sticky; top:0; z-index:100;
-    display:flex; justify-content:center;
-    padding: clamp(.6rem, 1.5vw, 1rem) clamp(1rem, 3vw, 2rem);
-  }
-  .nav-inner{
-    width:100%; max-width:1200px;
-    display:flex; align-items:center; justify-content:space-between;
-    background: var(--glass-bg);
-    border:1px solid var(--glass-border);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-radius: 16px;
-    padding: .7rem clamp(.9rem,2vw,1.4rem);
-    box-shadow: 0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
-  }
-  .logo{ font-weight:700; font-size: clamp(1.05rem,2vw,1.25rem); letter-spacing:.02em; }
-  .logo span{ color: var(--cyan); }
-  .nav-links{ display:flex; gap:.6rem; align-items:center; }
-  .nav-btn{
-    border:1px solid var(--glass-border);
-    background: var(--glass-bg);
-    color: var(--text-main);
-    padding:.55rem 1rem;
-    border-radius: 10px;
-    cursor:pointer;
-    font-size:.92rem;
-    box-shadow: 0 4px 14px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.05);
-    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), background var(--dur) var(--ease);
-  }
-  .nav-btn:hover{ transform: translateY(-2px); box-shadow: 0 8px 22px rgba(79,216,255,.18), inset 0 1px 0 rgba(255,255,255,.08); }
-  .nav-btn:active{ transform: translateY(0) scale(.97); }
-  .nav-btn.nav-cta{
-    background: linear-gradient(135deg, var(--cyan), var(--indigo));
-    color:#04121a; font-weight:600; border:none;
-  }
-  .nav-btn.nav-cta:hover{ box-shadow: 0 10px 26px rgba(79,216,255,.35); }
-  .nav-btn:focus-visible, .btn:focus-visible, input:focus-visible{
-    outline: 2px solid var(--cyan); outline-offset: 2px;
-  }
+    deg) rotateX($ {
+    -y*7}
 
-  /* ---------- Pages ---------- */
-  .page{ display:none; }
-  .page.active{ display:block; animation: pageIn .5s var(--ease); }
-  @keyframes pageIn{ from{ opacity:0; transform: translateY(12px); } to{ opacity:1; transform:none; } }
+  deg) translateZ(14px)`}
 
-  /* ---------- Hero ---------- */
-  .hero{
-    min-height: min(88vh, 780px);
-    display:flex; align-items:center; justify-content:center;
-    padding: clamp(2rem,6vw,4rem) clamp(1rem,4vw,2rem);
-    perspective: 1200px;
-  }
-  .hero-3d{
-    position:relative; width:100%; max-width:1100px;
-    transform-style: preserve-3d;
-  }
-  .hero-layer{ position:absolute; inset:0; transform-style: preserve-3d; pointer-events:none; }
-  .floating-card{
-    position:absolute;
-    background: var(--glass-bg-strong);
-    border:1px solid var(--glass-border);
-    border-radius:16px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 20px 40px rgba(0,0,0,.4);
-    padding:.9rem 1.1rem;
-    font-size:.85rem;
-    color: var(--text-dim);
-    animation: floatCard 7s ease-in-out infinite;
-  }
-  .card-1{ top:6%; left:2%; transform: rotateY(18deg) rotateX(6deg) translateZ(40px); animation-delay:0s; }
-  .card-2{ top:62%; left:0%; transform: rotateY(-14deg) rotateX(-4deg) translateZ(20px); animation-delay:1.2s; }
-  .card-3{ top:14%; right:0%; transform: rotateY(-20deg) rotateX(8deg) translateZ(30px); animation-delay:.6s; }
-  @keyframes floatCard{ 0%,100%{ translate: 0 0; } 50%{ translate: 0 -10px; } }
+  );
+  hero.addEventListener('pointerleave',()=>card.style.transform='');
+  document.querySelectorAll('.tilt').forEach(el=> {
+    el.addEventListener('pointermove',e=> {
+      const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      el.style.transform=`perspective(900px) rotateY($ {
+      x*8}
 
-  .hero-content{
-    position:relative; z-index:5; text-align:center;
-    max-width: 720px; margin:0 auto;
-    display:flex; flex-direction:column; align-items:center; gap: clamp(.9rem,2vw,1.3rem);
-  }
-  .badge{
-    display:inline-block; padding:.45rem 1rem; border-radius:999px;
-    background: var(--glass-bg); border:1px solid var(--glass-border);
-    color: var(--cyan); font-size:.85rem; backdrop-filter: blur(8px);
-  }
-  .hero-content h1{
-    font-size: clamp(2rem, 1.3rem + 4vw, 3.6rem);
-    font-weight:700; line-height:1.1; letter-spacing:-.01em;
-    background: linear-gradient(135deg, #fff 40%, var(--cyan) 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-  }
-  .hero-content p{ color: var(--text-dim); font-size: clamp(1rem, .9rem + .4vw, 1.15rem); max-width:520px; }
-  .hero-actions{ display:flex; gap: .9rem; flex-wrap:wrap; justify-content:center; margin-top:.4rem; }
+      deg) rotateX($ {
+      -y*8}
 
-  /* ---------- Buttons ---------- */
-  .btn{
-    border:none; cursor:pointer; border-radius:12px;
-    padding: .85rem 1.6rem; font-size:1rem; font-weight:600;
-    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), filter var(--dur) var(--ease);
-    min-height:44px;
-  }
-  .btn-primary{
-    background: linear-gradient(135deg, var(--cyan), var(--indigo));
-    color:#03121a;
-    box-shadow: 0 12px 30px rgba(79,216,255,.28), inset 0 1px 0 rgba(255,255,255,.3);
-  }
-  .btn-primary:hover{ transform: translateY(-3px); box-shadow: 0 18px 38px rgba(79,216,255,.4); }
-  .btn-primary:active{ transform: translateY(0) scale(.98); }
-  .btn-ghost{
-    background: var(--glass-bg); color: var(--text-main);
-    border:1px solid var(--glass-border);
-    backdrop-filter: blur(8px);
-  }
-  .btn-ghost:hover{ transform: translateY(-3px); background: var(--glass-bg-strong); }
-  .btn-block{ width:100%; }
+    deg) translateY(-6px)`}
 
-  /* ---------- About / Cards ---------- */
-  .about{
-    padding: clamp(3rem,8vw,6rem) clamp(1rem,4vw,2rem);
-    max-width:1100px; margin:0 auto;
-    text-align:center;
-  }
-  .about h2{
-    font-size: clamp(1.6rem,1.1rem + 2.4vw,2.4rem);
-    margin-bottom: clamp(1.6rem,4vw,2.6rem);
-  }
-  .card-grid{
-    display:grid; gap: clamp(1.2rem,3vw,1.8rem);
-    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
-    perspective: 1000px;
-  }
-  .glass-card{
-    background: var(--glass-bg);
-    border:1px solid var(--glass-border);
-    border-radius: var(--radius);
-    padding: clamp(1.5rem,4vw,2.3rem);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow: 0 10px 30px rgba(0,0,0,.35);
-    text-align:left;
-    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
-    will-change: transform;
-  }
-  .glass-card:hover, .glass-card:focus-visible{
-    border-color: rgba(79,216,255,.4);
-    box-shadow: 0 20px 45px rgba(79,216,255,.18), 0 0 0 1px rgba(79,216,255,.15);
-  }
-  .card-icon{ font-size:1.8rem; margin-bottom:.8rem; }
-  .glass-card h3{ font-size:1.15rem; margin-bottom:.5rem; }
-  .glass-card p{ color: var(--text-dim); font-size:.95rem; }
+    );
+  el.addEventListener('pointerleave',()=>el.style.transform='')}
 
-  /* ---------- CTA ---------- */
-  .cta{ padding: clamp(2rem,6vw,4rem) clamp(1rem,4vw,2rem); display:flex; justify-content:center; }
-  .cta-card{
-    max-width:720px; width:100%; text-align:center;
-    display:flex; flex-direction:column; align-items:center; gap:1rem;
-    background: linear-gradient(180deg, rgba(108,99,255,.10), rgba(79,216,255,.05));
-  }
-  .cta-card h2{ font-size: clamp(1.5rem,1.1rem + 2vw,2.1rem); }
-  .cta-card p{ color: var(--text-dim); }
+)}
 
-  /* ---------- Footer ---------- */
-  .footer{ text-align:center; padding: clamp(1.5rem,4vw,2.5rem) 1rem; color: var(--text-dim); font-size:.85rem; }
+let sx=0,sy=0;
+const vp=document.getElementById('viewport');
+vp.addEventListener('touchstart',e=> {
+  sx=e.changedTouches[0].clientX;
+sy=e.changedTouches[0].clientY}
 
-  /* ---------- Form pages ---------- */
-  .form-wrap{
-    min-height: 80vh; display:flex; align-items:center; justify-content:center;
-    padding: clamp(1.5rem,5vw,3rem) 1rem;
-    perspective: 1000px;
-  }
-  .glass-panel{
-    width:100%; max-width:460px;
-    background: var(--glass-bg-strong);
-    border:1px solid var(--glass-border);
-    border-radius: var(--radius);
-    padding: clamp(1.8rem,5vw,2.6rem);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    box-shadow: 0 25px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
-    text-align:center;
-  }
-  .form-panel h2{ font-size: clamp(1.4rem,1rem + 2vw,1.8rem); margin-bottom:.4rem; }
-  .form-sub{ color: var(--text-dim); font-size:.92rem; margin-bottom:1.6rem; }
-  .field-group{ text-align:left; margin-bottom:1.1rem; }
-  .field-group label{ display:block; font-size:.85rem; color: var(--text-dim); margin-bottom:.4rem; }
-  .field-group input{
-    width:100%; padding:.85rem 1rem; border-radius:12px;
-    background: rgba(255,255,255,.035);
-    border:1px solid var(--glass-border);
-    color: var(--text-main); font-size:.98rem;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,.4);
-    transition: box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
-  }
-  .field-group input:focus{
-    outline:none; border-color: var(--cyan);
-    box-shadow: inset 0 2px 6px rgba(0,0,0,.4), 0 0 0 3px rgba(79,216,255,.2), 0 0 22px rgba(79,216,255,.25);
-  }
-  .secure-note{ margin-top:1rem; font-size:.8rem; color: var(--text-dim); }
+, {
+passive:true}
 
-  .success-panel{ display:flex; flex-direction:column; align-items:center; gap: .8rem; }
-  .check-wrap{ width:84px; height:84px; margin-bottom:.4rem; }
-  .check-svg{ width:100%; height:100%; }
-  .check-circle{
-    fill:none; stroke: var(--cyan); stroke-width:3;
-    stroke-dasharray: 151; stroke-dashoffset:151;
-    animation: circleDraw .6s ease forwards;
-    filter: drop-shadow(0 0 8px rgba(79,216,255,.6));
-  }
-  .check-mark{
-    fill:none; stroke:#eafcff; stroke-width:4; stroke-linecap:round; stroke-linejoin:round;
-    stroke-dasharray:36; stroke-dashoffset:36;
-    animation: checkDraw .35s ease forwards .55s;
-  }
-  @keyframes circleDraw{ to{ stroke-dashoffset:0; } }
-  @keyframes checkDraw{ to{ stroke-dashoffset:0; } }
-  .success-panel h2{ font-size: clamp(1.4rem,1rem + 2vw,1.7rem); }
-  .success-panel p{ color: var(--text-dim); font-size:.95rem; }
+);
+vp.addEventListener('touchend',e=> {
+  const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx) <70||Math.abs(dx)<Math.abs(dy)*1.2)return;
+  const p=['home','apply','success'],i=p.indexOf(current);
+  if(dx<0&&i<p.length-1)showPage(p[i+1]);
+if(dx> 0&&i>0)showPage(p[i-1])}
 
-  /* ---------- Responsive tweaks ---------- */
-  @media (max-width: 768px){
-    .grid-layer{ opacity:.2; }
-    .floating-card{ display:none; }
-    .hero{ min-height:auto; padding-top: 3rem; padding-bottom: 2.5rem; }
-    .nav-links{ gap:.4rem; }
-  }
-  @media (max-width: 480px){
-    .nav-inner{ padding:.55rem .8rem; }
-    .glass-panel{ padding: 1.6rem 1.3rem; }
-  }
+, {
+passive:true}
 
-  @media (prefers-reduced-motion: reduce){
-    *, *::before, *::after{
-      animation-duration: .001ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: .001ms !important;
-      scroll-behavior: auto !important;
-    }
-    .grid-layer, .particles span, .floating-card{ animation: none !important; }
-  }
-</style>
-</head>
-<body>
+);
+function submitForm(e) {
+  e.preventDefault();
+  const fullName=document.getElementById('fullName').value.trim(),email=document.getElementById('email').value.trim(),phone=document.getElementById('phone').value.trim();
+  if(!fullName||!email||!phone)return false;
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;
+  btn.textContent='Submitting...';
+  fetch(APPSCRIPT_URL, {
+    method:'POST',headers: {
+    'Content-Type':'application/x-www-form-urlencoded'}
 
-  <div class="bg-scene" aria-hidden="true">
-    <div class="grid-layer"></div>
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2"></div>
-    <div class="particles">
-      <span></span><span></span><span></span><span></span><span></span><span></span>
-    </div>
-  </div>
+    ,body:new URLSearchParams( {
+    fullName,email,phone}
 
-  <nav class="navbar">
-    <div class="nav-inner">
-      <a class="logo" href="#" onclick="showPage('home'); return false;">Zen<span>Crew</span></a>
-      <div class="nav-links">
-        <button class="nav-btn" onclick="showPage('home')">Home</button>
-        <button class="nav-btn nav-cta" onclick="showPage('apply')">Apply</button>
-      </div>
-    </div>
-  </nav>
+  )}
 
-  <main id="app">
+  ).then(()=>showPage('success')).catch(()=>showPage('success')).finally(()=> {
+    btn.disabled=false;
+    btn.textContent='Submit Application →';
+  document.getElementById('applicationForm').reset()}
 
-    <!-- HOME PAGE -->
-    <section id="page-home" class="page active">
-      <div class="hero" id="hero">
-        <div class="hero-3d" id="hero3d">
-          <div class="hero-layer">
-            <div class="floating-card card-1">&lt;/&gt; clean code</div>
-            <div class="floating-card card-2">🚀 ship faster</div>
-            <div class="floating-card card-3">🤝 grow together</div>
-          </div>
-          <div class="hero-content">
-            <span class="badge">✨ Join Our Community</span>
-            <h1>A Crew Built for Modern Developers</h1>
-            <p>Connect, collaborate, and grow with developers who share your passion for building amazing things.</p>
-            <div class="hero-actions">
-              <button class="btn btn-primary" onclick="showPage('apply')">Get Started</button>
-              <button class="btn btn-ghost" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">Learn More</button>
-            </div>
-          </div>
-        </div>
-      </div>
+  );
+return false}
 
-      <section class="about" id="about">
-        <h2>More Than Just a Community</h2>
-        <div class="card-grid">
-          <div class="glass-card" tabindex="0">
-            <div class="card-icon">🤝</div>
-            <h3>Collaborative Growth</h3>
-            <p>Here, technical precision meets a welcoming atmosphere. Whether you're debugging a complex architecture or sharing your first side project, you'll find a crew ready to support your growth.</p>
-          </div>
-          <div class="glass-card" tabindex="0">
-            <div class="card-icon">🧭</div>
-            <h3>Expert Mentorship</h3>
-            <p>Connect with seasoned developers who've been where you are. Get guidance, share knowledge, and accelerate your journey from junior to senior engineer.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="cta">
-        <div class="glass-card cta-card">
-          <h2>Ready to Join Zen Crew?</h2>
-          <p>Become part of a community that values learning, growth, and collaboration. Your application takes just one minute.</p>
-          <button class="btn btn-primary" onclick="showPage('apply')">Apply to Zen Crew</button>
-        </div>
-      </section>
-
-      <footer class="footer">
-        <p>© 2026 Zen Crew. All rights reserved.</p>
-      </footer>
-    </section>
-
-    <!-- APPLY PAGE -->
-    <section id="page-apply" class="page">
-      <div class="form-wrap">
-        <div class="glass-panel form-panel">
-          <h2>Apply to Zen Crew</h2>
-          <p class="form-sub">Think Zen Crew is for you? Submit your application. It only takes a minute.</p>
-          <form id="applicationForm" onsubmit="return submitForm(event)">
-            <div class="field-group">
-              <label for="fullName">Full Name</label>
-              <input type="text" id="fullName" name="fullName" autocomplete="name" required />
-            </div>
-            <div class="field-group">
-              <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" autocomplete="email" required />
-            </div>
-            <div class="field-group">
-              <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" name="phone" autocomplete="tel" required />
-            </div>
-            <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Submit Application</button>
-            <p class="secure-note">🔒 Your information is secure and encrypted.</p>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- SUCCESS PAGE -->
-    <section id="page-success" class="page">
-      <div class="form-wrap">
-        <div class="glass-panel success-panel">
-          <div class="check-wrap">
-            <svg class="check-svg" viewBox="0 0 52 52">
-              <circle class="check-circle" cx="26" cy="26" r="24" />
-              <path class="check-mark" d="M14 27l7 7 17-17" />
-            </svg>
-          </div>
-          <h2>Application Submitted</h2>
-          <p>Your application has been received successfully. We'll review it and get back to you within 3-5 business days.</p>
-          <button class="btn btn-ghost" onclick="showPage('home')">Back to Home</button>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <script>
-    // ⚠️ Replace with your existing Apps Script deployment URL — placeholder only.
-    const APPSCRIPT_URL = "YOUR_EXISTING_APPS_SCRIPT_URL_HERE";
-
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-    function showPage(pageId){
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      const target = document.getElementById('page-' + pageId);
-      if(target) target.classList.add('active');
-      window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
-    }
-
-    function submitForm(e){
-      e.preventDefault();
-      const fullName = document.getElementById('fullName').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-
-      if(!fullName || !email || !phone){
-        return false;
-      }
-
-      const btn = document.getElementById('submitBtn');
-      btn.disabled = true;
-      btn.textContent = 'Submitting...';
-
-      fetch(APPSCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ fullName, email, phone })
-      })
-      .then(() => { showPage('success'); })
-      .catch(() => { showPage('success'); })
-      .finally(() => {
-        btn.disabled = false;
-        btn.textContent = 'Submit Application';
-        document.getElementById('applicationForm').reset();
-      });
-
-      return false;
-    }
-
-    // Lightweight 3D pointer parallax — desktop only, respects reduced motion
-    if(canHover && !reducedMotion){
-      const hero3d = document.getElementById('hero3d');
-      const heroEl = document.getElementById('hero');
-      heroEl.addEventListener('mousemove', (e) => {
-        const rect = heroEl.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        hero3d.style.transform = `rotateY(${x * 6}deg) rotateX(${-y * 6}deg)`;
-      });
-      heroEl.addEventListener('mouseleave', () => {
-        hero3d.style.transform = 'rotateY(0deg) rotateX(0deg)';
-      });
-
-      document.querySelectorAll('.glass-card').forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-          const r = card.getBoundingClientRect();
-          const x = (e.clientX - r.left) / r.width - 0.5;
-          const y = (e.clientY - r.top) / r.height - 0.5;
-          card.style.transform = `translateY(-4px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
-        });
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = '';
-        });
-      });
-    }
-  </script>
-</body>
-</html>
+</script> </body> </html>
