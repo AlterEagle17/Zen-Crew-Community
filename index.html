@@ -11,7 +11,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;background:#030303}
 body{
-  background:#030303!important;color:#f5f5f5!important;
+  background:#030303!important;color:#f7f9ff!important;
   font-family:Inter,system-ui,sans-serif;overflow-x:hidden;
 }
 body:before{
@@ -279,6 +279,386 @@ body:before{
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}
 }
+
+/* ===== FINAL ZEN CREW IDENTITY: WHITE + ELECTRIC BLUE ===== */
+:root{
+  --zc-white:#f7f9ff;
+  --zc-blue:#42d9ff;
+  --zc-blue2:#6b6dff;
+  --zc-dim:#7e8493;
+  --zc-border:rgba(255,255,255,.10);
+}
+.home-nav-brand{
+  color:#fff!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  letter-spacing:-.045em!important;
+  white-space:nowrap;
+}
+.home-nav-brand span{
+  color:var(--zc-blue)!important;
+  font-weight:900!important;
+}
+.home-nav-brand:after{
+  content:"";
+  display:inline-block;
+  width:5px;height:5px;border-radius:50%;
+  margin:0 0 2px 7px;
+  background:var(--zc-blue);
+  box-shadow:0 0 14px rgba(66,217,255,.9);
+  animation:zcPulse 1.7s ease-in-out infinite;
+}
+@keyframes zcPulse{50%{opacity:.3;transform:scale(.6)}}
+
+.home-footer-title{
+  color:#fff!important;
+  font-size:20px!important;
+  font-weight:900!important;
+  letter-spacing:-.045em!important;
+}
+.home-footer-title span{color:var(--zc-blue)!important}
+
+.hero-title{
+  color:#f7f9ff!important;
+}
+.hero-title .hero-gradient{
+  background:linear-gradient(100deg,#fff 5%,#fff 25%,#4de0ff 48%,#5d7cff 72%,#fff 96%);
+  background-size:240% 100%;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.hero-badge:before{
+  background:var(--zc-blue)!important;
+  box-shadow:0 0 16px var(--zc-blue)!important;
+}
+.hero-btn-primary{
+  background:#f7f9ff!important;
+  color:#050609!important;
+}
+.hero-btn-secondary:hover{
+  border-color:rgba(66,217,255,.42)!important;
+  color:#fff!important;
+  box-shadow:0 0 30px rgba(66,217,255,.06);
+}
+.section-title{color:#f7f9ff!important}
+.section-title-line{
+  background:linear-gradient(90deg,var(--zc-blue),transparent)!important;
+}
+.about-card:hover{
+  border-color:rgba(66,217,255,.25)!important;
+  box-shadow:0 35px 100px rgba(0,0,0,.55),0 0 45px rgba(66,217,255,.045)!important;
+}
+.about-card-title:before{
+  color:#555d6d!important;
+}
+.about-card:nth-child(1) .about-card-title:after,
+.about-card:nth-child(2) .about-card-title:after{
+  content:"";
+  display:inline-block;
+  width:24px;height:1px;
+  margin-left:10px;
+  vertical-align:middle;
+  background:var(--zc-blue);
+  opacity:.7;
+}
+.cta{
+  background:
+    radial-gradient(circle at 50% 0%,rgba(66,217,255,.10),transparent 38%),
+    linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.012))!important;
+}
+.cta-button{
+  background:linear-gradient(100deg,#fff,#bcefff)!important;
+}
+.home-nav-link:hover{color:#fff!important}
+.home-nav-link:after{
+  background:linear-gradient(90deg,var(--zc-blue),var(--zc-blue2))!important;
+}
+.hud b{color:#9defff!important}
+.space-grid{
+  opacity:.16!important;
+  background-image:
+    linear-gradient(rgba(66,217,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(66,217,255,.045) 1px,transparent 1px)!important;
+}
+.home-page::before{
+  background:
+    radial-gradient(circle at 50% 50%,rgba(66,217,255,.075),transparent 17%),
+    radial-gradient(circle at 20% 30%,rgba(66,217,255,.035),transparent 15%),
+    radial-gradient(circle at 80% 70%,rgba(93,124,255,.05),transparent 18%)!important;
+}
+
+/* More complete hero composition */
+.hero:before{
+  content:"";
+  position:absolute;
+  width:min(54vw,680px);
+  aspect-ratio:1;
+  border:1px solid rgba(66,217,255,.06);
+  border-radius:50%;
+  box-shadow:
+    0 0 0 60px rgba(66,217,255,.012),
+    0 0 0 120px rgba(66,217,255,.007);
+  pointer-events:none;
+  animation:heroOrbit 14s linear infinite;
+}
+.hero:after{
+  content:"";
+  position:absolute;
+  width:1px;height:75%;
+  background:linear-gradient(transparent,rgba(66,217,255,.12),transparent);
+  left:50%;top:13%;
+  opacity:.35;
+  pointer-events:none;
+}
+@keyframes heroOrbit{
+  from{transform:rotate(0deg) scale(.98)}
+  to{transform:rotate(360deg) scale(1.02)}
+}
+
+/* Hide old image-specific styling */
+.zc-logo{display:none!important}
+
+@media(max-width:768px){
+  .home-nav-brand{font-size:15px!important}
+  .home-nav-brand:after{width:4px;height:4px}
+  .hero:before{width:100vw}
+  .hero:after{height:55%;top:20%}
+}
+
+
+/* ===== COMPLETE APPLY EXPERIENCE ===== */
+.apply-page{
+  min-height:100vh!important;
+  background:#030303!important;
+  overflow:hidden!important;
+}
+.apply-page-content{min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:2}
+.top-nav .nav-brand{
+  color:#fff;text-decoration:none;font-size:15px;font-weight:900;
+  letter-spacing:-.045em;
+}
+.top-nav .nav-brand span{color:#42d9ff}
+.nav-back{
+  color:#858892!important;text-decoration:none!important;
+  font:500 10px "DM Mono",monospace!important;
+  letter-spacing:.12em;
+  transition:color .3s,transform .3s;
+}
+.nav-back:hover{color:#fff!important;transform:translateX(-3px)}
+
+.apply-main{
+  flex:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:75px 32px 95px!important;
+}
+.apply-shell{
+  width:min(1120px,100%);
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(400px,510px);
+  gap:90px;
+  align-items:center;
+}
+.apply-intro{position:relative}
+.apply-kicker{
+  color:#666a75;
+  font:500 10px "DM Mono",monospace;
+  letter-spacing:.16em;
+  margin-bottom:22px;
+}
+.apply-kicker:before{
+  content:"";
+  display:inline-block;width:26px;height:1px;
+  vertical-align:middle;margin-right:10px;
+  background:#42d9ff;
+}
+.apply-title{
+  font-size:clamp(58px,7vw,100px)!important;
+  line-height:.8!important;
+  letter-spacing:-.08em!important;
+  font-weight:900!important;
+  color:#f6f8ff!important;
+  margin:0 0 28px!important;
+}
+.apply-title span{
+  background:linear-gradient(100deg,#42d9ff,#6d7dff 70%,#fff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.apply-copy{
+  max-width:510px;
+  color:#777b87;
+  font-size:14px;
+  line-height:1.8;
+}
+.apply-stats{
+  display:flex;
+  gap:35px;
+  margin-top:40px;
+  padding-top:22px;
+  border-top:1px solid rgba(255,255,255,.07);
+}
+.apply-stats div{display:flex;flex-direction:column;gap:5px}
+.apply-stats b{
+  font:500 17px "DM Mono",monospace;color:#e8ecf5;
+}
+.apply-stats span{
+  font:400 8px "DM Mono",monospace;color:#50535c;letter-spacing:.13em;
+}
+.apply-terminal{
+  width:min(100%,520px);
+  margin-top:38px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  background:rgba(5,6,9,.65);
+  box-shadow:0 25px 80px rgba(0,0,0,.35),inset 0 1px rgba(255,255,255,.04);
+  overflow:hidden;
+}
+.terminal-top{
+  height:31px;display:flex;align-items:center;gap:5px;padding:0 11px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  color:#444852;font:400 8px "DM Mono",monospace;
+}
+.terminal-top i{width:5px;height:5px;border-radius:50%;background:#393c43}
+.terminal-top span{margin-left:8px}
+.terminal-body{
+  padding:15px 16px;color:#777b86;
+  font:400 9px/2 "DM Mono",monospace;
+}
+.terminal-dim{color:#555b66}
+.terminal-ok{color:#58dfff}
+.cursor{
+  display:inline-block;width:5px;height:10px;margin-left:3px;vertical-align:-2px;
+  background:#42d9ff;animation:terminalBlink 1s steps(1) infinite;
+}
+@keyframes terminalBlink{50%{opacity:0}}
+
+.form-container{
+  width:100%!important;max-width:510px!important;
+  position:relative;
+}
+.form-topline{
+  display:flex;justify-content:space-between;
+  margin-bottom:10px;padding:0 3px;
+  color:#4e525c;font:500 8px "DM Mono",monospace;letter-spacing:.12em;
+}
+.form-card{
+  position:relative;
+  padding:31px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.012))!important;
+  border:1px solid rgba(255,255,255,.11)!important;
+  border-radius:19px!important;
+  box-shadow:0 35px 110px rgba(0,0,0,.65),inset 0 1px rgba(255,255,255,.06)!important;
+}
+.form-card:before{
+  content:"";
+  position:absolute;top:0;left:11%;right:11%;height:1px;
+  background:linear-gradient(90deg,transparent,#42d9ff,transparent);
+  opacity:.55;
+}
+.form-group{gap:22px!important}
+.form-field{gap:8px!important}
+.form-label{
+  color:#717580!important;
+  font:500 9px "DM Mono",monospace!important;
+  letter-spacing:.13em!important;
+}
+.form-input-wrapper{position:relative}
+.form-input{
+  height:55px!important;
+  padding:0 16px 0 46px!important;
+  background:rgba(0,0,0,.52)!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:10px!important;
+  color:#f4f7ff!important;
+  font-size:14px!important;
+  transition:border-color .3s,box-shadow .3s,background .3s,transform .3s!important;
+}
+.form-input:hover{border-color:rgba(255,255,255,.15)!important}
+.form-input:focus{
+  border-color:rgba(66,217,255,.48)!important;
+  background:rgba(3,7,10,.75)!important;
+  box-shadow:0 0 0 3px rgba(66,217,255,.055),0 10px 35px rgba(0,0,0,.25)!important;
+  transform:translateY(-1px);
+}
+.form-input::placeholder{color:#454852!important}
+.form-icon{
+  left:15px!important;
+  width:18px!important;height:18px!important;
+  opacity:.38!important;
+}
+.icon-user:before{content:"◯"!important;color:#9feeff;font-size:14px!important}
+.icon-email:before{content:"@"!important;color:#9feeff;font-size:13px!important}
+.icon-phone:before{content:"+"!important;color:#9feeff;font-size:14px!important}
+.form-note{
+  display:flex;align-items:center;gap:8px;
+  padding:11px 12px;
+  color:#565a64;
+  font:400 9px/1.5 "DM Mono",monospace;
+  border:1px solid rgba(255,255,255,.055);
+  border-radius:9px;
+  background:rgba(255,255,255,.018);
+}
+.form-note-dot{
+  width:5px;height:5px;border-radius:50%;flex:0 0 auto;
+  background:#42d9ff;box-shadow:0 0 10px #42d9ff;
+}
+.submit-btn{
+  min-height:55px!important;
+  border-radius:10px!important;
+  font:700 10px "DM Mono",monospace!important;
+  letter-spacing:.08em!important;
+  cursor:pointer;
+}
+.submit-btn:after{content:"→";display:block!important;margin-left:3px}
+.submit-btn:disabled{filter:grayscale(.5);transform:none!important}
+.apply-bottom{
+  display:flex;justify-content:space-between;
+  padding:14px 3px 0;color:#444750;
+  font:400 8px "DM Mono",monospace;letter-spacing:.1em;
+}
+.footer-text{font:400 10px "DM Mono",monospace!important;color:#50535c!important}
+.footer-text span{color:#42d9ff}
+.footer-links{gap:20px!important}
+
+/* Subtle animated application field order */
+.form-field:nth-child(1){animation:applyField .65s .08s both}
+.form-field:nth-child(2){animation:applyField .65s .16s both}
+.form-field:nth-child(3){animation:applyField .65s .24s both}
+.form-note{animation:applyField .65s .32s both}
+.submit-btn{animation:applyField .65s .40s both}
+@keyframes applyField{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:none}
+}
+
+@media(max-width:900px){
+  .apply-shell{grid-template-columns:1fr;gap:45px;max-width:620px}
+  .apply-intro{text-align:center}
+  .apply-kicker{margin-bottom:18px}
+  .apply-copy{margin:auto}
+  .apply-stats{justify-content:center}
+  .apply-terminal{margin:30px auto 0;text-align:left}
+  .form-container{max-width:620px!important;margin:auto}
+}
+@media(max-width:600px){
+  .top-nav{width:calc(100% - 20px)!important}
+  .apply-main{padding:55px 18px 70px!important}
+  .apply-shell{gap:35px}
+  .apply-title{font-size:clamp(56px,17vw,78px)!important}
+  .apply-copy{font-size:13px}
+  .apply-stats{gap:22px;margin-top:30px}
+  .apply-terminal{display:none}
+  .form-card{padding:22px 17px!important;border-radius:15px!important}
+  .form-group{gap:18px!important}
+  .form-input{height:52px!important}
+  .apply-bottom{font-size:7px}
+  .footer{padding:28px 18px!important}
+  .footer-links{width:auto!important}
+}
+</style>
+
 </style>
 
 </head>
@@ -290,92 +670,102 @@ body:before{
 
 <!-- APPLY PAGE -->
 <div class="page apply-page">
-  <div class="bg-shader"></div>
   <div class="apply-page-content">
     <nav class="top-nav">
-      <a href="#" class="nav-brand">
-        <span>ZEN CREW</span>
-      </a>
-      <a href="#" class="nav-back" onclick="showPage('home'); return false;">
-        ← Back
-      </a>
+      <a href="#" class="nav-brand" onclick="showPage('home');return false;">ZEN <span>CREW</span></a>
+      <a href="#" class="nav-back" onclick="showPage('home'); return false;">← BACK HOME</a>
     </nav>
 
-    <div class="apply-main">
-      <div class="form-container">
-        <div class="header-section">
-          <h1 class="header-title">Apply to Zen Crew</h1>
-          <p class="header-subtitle">Think Zen Crew is for you? Submit your application.<br>It only takes a minute.</p>
+    <main class="apply-main">
+      <div class="apply-shell">
+        <div class="apply-intro">
+          <div class="apply-kicker">ZEN CREW / APPLICATION_01</div>
+          <h1 class="apply-title">ENTER<br><span>THE CREW.</span></h1>
+          <p class="apply-copy">
+            We are building a focused community for developers and designers.
+            If you love learning, shipping and making things better, you're in the right place.
+          </p>
+
+          <div class="apply-stats">
+            <div><b>01</b><span>BUILDERS</span></div>
+            <div><b>02</b><span>DESIGNERS</span></div>
+            <div><b>03</b><span>SHIPPERS</span></div>
+          </div>
+
+          <div class="apply-terminal">
+            <div class="terminal-top"><i></i><i></i><i></i><span>zencrew/access</span></div>
+            <div class="terminal-body">
+              <span class="terminal-dim">$</span> initiate_application()<br>
+              <span class="terminal-dim">→</span> identity required<br>
+              <span class="terminal-dim">→</span> builder mindset required<br>
+              <span class="terminal-ok">→ READY FOR INPUT_</span><span class="cursor"></span>
+            </div>
+          </div>
         </div>
 
-        <div class="form-card">
-          <form class="form-group" id="applicationForm">
-            <!-- Full Name -->
-            <div class="form-field">
-              <label class="form-label">Full Name</label>
-              <div class="form-input-wrapper">
-                <div class="form-icon icon-user"></div>
-                <input 
-                  type="text" 
-                  class="form-input" 
-                  id="fullName" 
-                  placeholder="Your full name" 
-                  required
-                >
+        <div class="form-container">
+          <div class="form-topline">
+            <span>APPLICATION</span>
+            <span>1 MIN / 3 FIELDS</span>
+          </div>
+
+          <div class="form-card">
+            <form class="form-group" id="applicationForm">
+              <div class="form-field">
+                <label class="form-label" for="fullName">01 / FULL NAME</label>
+                <div class="form-input-wrapper">
+                  <div class="form-icon icon-user"></div>
+                  <input type="text" class="form-input" id="fullName"
+                         placeholder="Your full name" autocomplete="name" required>
+                </div>
               </div>
-            </div>
 
-            <!-- Email -->
-            <div class="form-field">
-              <label class="form-label">Email Address</label>
-              <div class="form-input-wrapper">
-                <div class="form-icon icon-email"></div>
-                <input 
-                  type="email" 
-                  class="form-input" 
-                  id="email" 
-                  placeholder="email@example.com" 
-                  required
-                >
+              <div class="form-field">
+                <label class="form-label" for="email">02 / EMAIL ADDRESS</label>
+                <div class="form-input-wrapper">
+                  <div class="form-icon icon-email"></div>
+                  <input type="email" class="form-input" id="email"
+                         placeholder="you@example.com" autocomplete="email" required>
+                </div>
               </div>
-            </div>
 
-            <!-- Phone -->
-            <div class="form-field">
-              <label class="form-label">Phone Number</label>
-              <div class="form-input-wrapper">
-                <div class="form-icon icon-phone"></div>
-                <input 
-                  type="tel" 
-                  class="form-input" 
-                  id="phone" 
-                  placeholder="+91 ***********" 
-                  required
-                >
+              <div class="form-field">
+                <label class="form-label" for="phone">03 / PHONE NUMBER</label>
+                <div class="form-input-wrapper">
+                  <div class="form-icon icon-phone"></div>
+                  <input type="tel" class="form-input" id="phone"
+                         placeholder="+91 **********" autocomplete="tel" required>
+                </div>
               </div>
-            </div>
 
-            <button type="submit" class="submit-btn" id="submitBtn">
-              Submit Application
-            </button>
-          </form>
-        </div>
+              <div class="form-note">
+                <span class="form-note-dot"></span>
+                Your details are sent securely for community review.
+              </div>
 
-        <div class="security-notice">
-          <div class="security-icon"></div>
-          <span>Your information is secure and encrypted.</span>
+              <button type="submit" class="submit-btn" id="submitBtn">
+                SUBMIT APPLICATION
+              </button>
+            </form>
+          </div>
+
+          <div class="apply-bottom">
+            <span>NO SPAM.</span>
+            <span>NO NOISE.</span>
+            <span>JUST BUILDING.</span>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    </main>
 
-  <footer class="footer">
-    <div class="footer-text">© 2026 Zen Crew. All rights reserved.</div>
-    <div class="footer-links">
-      <a href="#" class="footer-link">Privacy Policy</a>
-      <a href="#" class="footer-link">Terms of Service</a>
-    </div>
-  </footer>
+    <footer class="footer">
+      <div class="footer-text">ZEN <span>CREW</span> · 2026</div>
+      <div class="footer-links">
+        <a href="#" class="footer-link">Privacy</a>
+        <a href="#" class="footer-link">Terms</a>
+      </div>
+    </footer>
+  </div>
 </div>
 
 <!-- SUCCESS PAGE -->
@@ -404,7 +794,7 @@ body:before{
 <!-- HOME PAGE -->
 <div class="page home-page active">
   <nav class="home-nav">
-    <div class="home-nav-brand"><img class="zc-logo" src="ZC.png" alt="ZEN CREW"></div>
+    <div class="home-nav-brand">ZEN <span>CREW</span></div>
     <div class="home-nav-links">
       <a href="#" class="home-nav-link">About</a>
       <a href="#" class="home-nav-link">Features</a>
@@ -475,7 +865,7 @@ body:before{
     <div class="home-footer-content">
       <div class="home-footer-top">
         <div class="home-footer-brand">
-          <h3 class="home-footer-title"><img class="zc-logo" src="ZC.png" alt="ZEN CREW"></h3>
+          <h3 class="home-footer-title">ZEN <span>CREW</span></h3>
           <p class="home-footer-copyright">© 2026 Zen Crew. All rights reserved.</p>
         </div>
         <div class="home-footer-links">
