@@ -1,594 +1,712 @@
-<!doctype html> <html lang="en"> <head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"> <title> Zen Crew — 3D Swipe </title> <style> :root  {
-  --bg:#03060b;
-  --glass:#ffffff0a;
-  --line:#ffffff18;
-  --text:#f5f7ff;
-  --muted:#9ba8bf;
-  --cyan:#58e7ff;
-  --indigo:#7077ff;
-  --purple:#b05cff;
-  --ease:cubic-bezier(.16,1,.3,1)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zen Crew - Community for Developers</title>
+  
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:#030303}
+body{
+  background:#030303!important;color:#f5f5f5!important;
+  font-family:Inter,system-ui,sans-serif;overflow-x:hidden;
 }
-*  {
-  box-sizing:border-box
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:999;
+  opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-html,body  {
-  margin:0;
-  min-height:100%;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;
-  overflow-x:hidden
+.page{display:none;width:100%;min-height:100vh;flex-direction:column;background:#030303!important}
+.page.active{display:flex}
+.home-page{position:relative;isolation:isolate}
+#zc-space{
+  position:fixed;inset:0;width:100%;height:100%;z-index:-4;pointer-events:none;
+  background:#030303;
 }
-button,input  {
-  font:inherit
+.space-vignette{
+  position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 35%,transparent 0%,rgba(0,0,0,.15) 38%,rgba(0,0,0,.82) 100%),
+    linear-gradient(180deg,rgba(0,0,0,.15),#030303 92%);
 }
-button  {
-  cursor:pointer
+.space-grid{
+  position:fixed;left:-20%;right:-20%;bottom:-28%;height:70%;
+  z-index:-2;pointer-events:none;opacity:.2;
+  transform:perspective(700px) rotateX(67deg);
+  background-image:
+    linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);
+  background-size:70px 70px;
+  mask-image:linear-gradient(to top,black,transparent);
+  animation:gridTravel 8s linear infinite;
 }
-a  {
-  text-decoration:none;
-  color:inherit
+@keyframes gridTravel{to{background-position:0 70px}}
+/* Navigation */
+.home-nav,.top-nav{
+  position:sticky!important;top:14px;z-index:100;
+  width:min(1180px,calc(100% - 32px));margin:14px auto 0;
+  min-height:66px!important;padding:9px 10px 9px 18px!important;
+  border:1px solid rgba(255,255,255,.1)!important;border-radius:18px!important;
+  background:rgba(7,7,8,.62)!important;backdrop-filter:blur(28px) saturate(130%);
+  box-shadow:0 18px 70px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.06);
 }
-body  {
-  background:radial-gradient(circle at 15% 10%,#12344b 0,transparent 30%),radial-gradient(circle at 85% 15%,#2b1850 0,transparent 32%),linear-gradient(145deg,#02050a,#08111d 55%,#03050a)
+.home-nav-brand{display:flex!important;align-items:center!important;width:auto!important}
+.zc-logo{
+  display:block;width:104px;height:auto;object-fit:contain;object-position:left center;
+  filter:none!important;transition:transform .35s ease;
 }
-body:before  {
-  content:"";
-  position:fixed;
-  inset:0;
-  z-index:-2;
-  opacity:.16;
-  background-image:linear-gradient(#58e7ff24 1px,transparent 1px),linear-gradient(90deg,#58e7ff24 1px,transparent 1px);
-  background-size:55px 55px;
-  transform:perspective(700px) rotateX(62deg) scale(1.5);
-  transform-origin:center bottom;
-  mask-image:linear-gradient(black,transparent 75%);
-  animation:grid 18s linear infinite
+.zc-logo:hover{transform:scale(1.025)}
+.home-nav-links{display:flex!important;align-items:center!important;gap:26px!important;width:auto!important;margin:0!important}
+.home-nav-link{
+  position:relative;font:500 11px "DM Mono",monospace!important;
+  letter-spacing:.12em;text-transform:uppercase;color:#85858c!important;
 }
-@keyframes grid  {
-  to  {
-    background-position:0 550px
-  }
+.home-nav-link:hover{color:#fff!important}
+.home-nav-link:after{
+  content:"";position:absolute;left:0;bottom:-8px;width:0;height:1px;
+  background:#fff;transition:width .3s;
 }
-.orb  {
-  position:fixed;
-  border-radius:50%;
-  filter:blur(75px);
-  pointer-events:none;
-  z-index:-1;
-  opacity:.35
+.home-nav-link:hover:after{width:100%}
+.apply-btn{
+  padding:12px 18px!important;border-radius:11px!important;
+  background:#f2f2f2!important;color:#050505!important;border:0!important;
+  font:700 11px "DM Mono",monospace!important;letter-spacing:.06em;
+  transition:.3s!important;
 }
-.orb.a  {
-  width:300px;
-  height:300px;
-  background:#16dfff;
-  left:-120px;
-  top:25%
+.apply-btn:hover{transform:translateY(-2px)!important;box-shadow:0 12px 35px rgba(255,255,255,.12)}
+/* Hero */
+.hero{
+  position:relative!important;min-height:calc(100vh - 80px)!important;
+  max-width:1320px!important;width:100%!important;margin:auto!important;
+  padding:80px 32px 100px!important;display:flex!important;align-items:center!important;
+  justify-content:center!important;text-align:center;overflow:hidden;
 }
-.orb.b  {
-  width:340px;
-  height:340px;
-  background:#713cff;
-  right:-140px;
-  bottom:5%
+.hero-content{max-width:1050px!important;z-index:5;position:relative}
+.hero-badge{
+  display:inline-flex!important;align-items:center;gap:9px;
+  padding:8px 12px!important;border:1px solid rgba(255,255,255,.11)!important;
+  border-radius:100px!important;background:rgba(255,255,255,.035)!important;
+  color:#8d8d95!important;font:500 10px "DM Mono",monospace!important;
+  letter-spacing:.12em;text-transform:uppercase;margin-bottom:28px!important;
+  animation:heroIn .8s both;
 }
-.nav  {
-  position:fixed;
-  z-index:20;
-  top:0;
-  left:0;
-  right:0;
-  padding:12px clamp(10px,4vw,36px);
-  pointer-events:none
+.hero-badge:before{
+  content:"";width:6px;height:6px;border-radius:50%;background:#b7ff6a;
+  box-shadow:0 0 15px #b7ff6a;animation:blink 1.5s infinite;
 }
-.navin  {
-  max-width:1180px;
-  margin:auto;
-  padding:10px 12px 10px 18px;
-  border:1px solid var(--line);
-  border-radius:18px;
-  background:#050a12aa;
-  backdrop-filter:blur(20px);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  pointer-events:auto;
-  box-shadow:0 20px 60px #0008,inset 0 1px #fff2
-}
-.logo  {
-  font-weight:900;
-  letter-spacing:.04em
-}
-.logo b  {
-  color:var(--cyan)
-}
-.navlinks  {
-  display:flex;
-  gap:8px
-}
-.btn  {
-  border:1px solid var(--line);
-  border-radius:13px;
-  background:var(--glass);
-  color:var(--text);
-  padding:11px 18px;
-  min-height:46px;
-  transition:.35s var(--ease);
-  box-shadow:inset 0 1px #fff1,0 10px 30px #0005
-}
-.btn:hover  {
-  transform:translateY(-3px);
-  box-shadow:0 18px 40px #0008,0 0 25px #58e7ff1a
-}
-.primary  {
-  border:0;
-  background:linear-gradient(135deg,var(--cyan),var(--indigo));
-  color:#031019;
-  font-weight:800
-}
-.viewport  {
-  min-height:100svh;
-  padding:105px 14px 55px;
-  display:grid;
-  place-items:center;
-  perspective:1600px;
-  touch-action:pan-y
-}
-.deck  {
-  width:min(1100px,100%);
-  transform-style:preserve-3d
-}
-.page  {
-  display:none;
-  transform-style:preserve-3d
-}
-.page.active  {
-  display:block
-}
-.page.enter-left  {
-  animation:enterLeft .65s var(--ease)
-}
-.page.enter-right  {
-  animation:enterRight .65s var(--ease)
-}
-@keyframes enterLeft  {
-  from  {
-    opacity:0;
-    transform:translate3d(100px,0,-180px) rotateY(-16deg)
-  }
-  to  {
-    opacity:1;
-    transform:none
-  }
-}
-@keyframes enterRight  {
-  from  {
-    opacity:0;
-    transform:translate3d(-100px,0,-180px) rotateY(16deg)
-  }
-  to  {
-    opacity:1;
-    transform:none
-  }
-}
-.hero  {
-  min-height:590px;
-  display:grid;
-  place-items:center;
-  position:relative;
-  perspective:1300px
-}
-.heroCard  {
-  width:min(860px,100%);
-  padding:clamp(38px,7vw,82px) clamp(20px,7vw,80px);
-  text-align:center;
-  border:1px solid var(--line);
-  border-radius:34px;
-  background:linear-gradient(145deg,#ffffff12,#ffffff03);
-  backdrop-filter:blur(20px);
-  box-shadow:0 55px 110px #000b,inset 0 1px #fff2;
+@keyframes blink{50%{opacity:.25;transform:scale(.65)}}
+.hero-title{
+  font-size:clamp(66px,11vw,156px)!important;font-weight:900!important;
+  line-height:.78!important;letter-spacing:-.085em!important;margin:0 0 30px!important;
+  color:#f5f5f5!important;text-wrap:balance;
+  animation:heroIn .9s .08s both;
   transform-style:preserve-3d;
-  transition:transform .12s ease;
-  position:relative
+  text-shadow:0 25px 80px rgba(0,0,0,.8);
 }
-.heroCard:after  {
-  content:"";
-  position:absolute;
-  inset:-1px;
-  border-radius:inherit;
-  pointer-events:none;
-  background:linear-gradient(115deg,transparent 20%,#58e7ff33 48%,transparent 70%);
-  filter:blur(16px);
-  animation:sheen 5s linear infinite
+.hero-title .hero-gradient{
+  background:linear-gradient(105deg,#fff 5%,#fff 28%,#6fe9ff 48%,#9b7cff 69%,#fff 91%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:flow 5s ease-in-out infinite;
 }
-@keyframes sheen  {
-  from  {
-    transform:translateX(-100%)
-  }
-  to  {
-    transform:translateX(100%)
-  }
+@keyframes flow{50%{background-position:100% 0}}
+.hero-subtitle{
+  max-width:650px!important;margin:0 auto 34px!important;
+  color:#85858d!important;font-size:15px!important;line-height:1.8!important;
+  animation:heroIn .9s .16s both;
 }
-.badge  {
-  display:inline-flex;
-  border:1px solid #58e7ff44;
-  background:#58e7ff0b;
-  color:var(--cyan);
-  padding:8px 14px;
-  border-radius:99px;
-  font-size:.78rem;
-  letter-spacing:.08em
+.hero-buttons{display:flex!important;justify-content:center!important;gap:10px!important;animation:heroIn .9s .24s both}
+.hero-btn-primary,.hero-btn-secondary{
+  min-height:48px;padding:0 21px!important;border-radius:12px!important;
+  font:700 11px "DM Mono",monospace!important;letter-spacing:.07em;
+  transition:transform .3s,box-shadow .3s,border-color .3s!important;
 }
-.hero h1  {
-  font-size:clamp(2.6rem,7vw,5.8rem);
-  line-height:.95;
-  letter-spacing:-.065em;
-  margin:24px 0 20px;
-  background:linear-gradient(120deg,#fff 25%,#b8f4ff 55%,#9288ff);
-  -webkit-background-clip:text;
-  color:transparent
+.hero-btn-primary{
+  background:#f4f4f4!important;color:#050505!important;border:1px solid #fff!important;
+  box-shadow:0 12px 45px rgba(255,255,255,.08);
 }
-.hero p  {
-  max-width:650px;
-  margin:auto;
-  color:var(--muted);
-  font-size:clamp(1rem,2vw,1.2rem);
-  line-height:1.7
+.hero-btn-secondary{
+  background:rgba(255,255,255,.025)!important;color:#b5b5bb!important;
+  border:1px solid rgba(255,255,255,.12)!important;
 }
-.actions  {
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:30px
+.hero-btn-primary:hover,.hero-btn-secondary:hover{transform:translateY(-3px)!important}
+.hero-btn-primary:after,.hero-btn-secondary:after{display:none!important}
+.hero-bg{display:none!important}
+.hero-scroll{
+  position:absolute;bottom:25px;left:50%;transform:translateX(-50%);
+  color:#555;font:400 9px "DM Mono",monospace;letter-spacing:.22em;
 }
-.float  {
-  position:absolute;
-  padding:13px 17px;
-  border:1px solid var(--line);
-  border-radius:16px;
-  background:#0a1422aa;
-  backdrop-filter:blur(14px);
-  box-shadow:0 25px 55px #0009,inset 0 1px #fff1;
-  color:#cbd6e8;
-  font-size:.8rem;
-  animation:float 5s ease-in-out infinite
+.hero-scroll:after{
+  content:"";display:block;width:1px;height:38px;background:linear-gradient(#666,transparent);
+  margin:9px auto 0;animation:scrollLine 1.6s infinite;
 }
-.f1  {
-  left:1%;
-  top:14%;
-  transform:translateZ(100px) rotateY(17deg)
+@keyframes scrollLine{50%{transform:translateY(8px);opacity:.3}}
+@keyframes heroIn{from{opacity:0;transform:translateY(22px) scale(.985)}to{opacity:1;transform:none}}
+/* Floating HUD */
+.hud{
+  position:absolute;z-index:4;pointer-events:none;
+  border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.3);
+  backdrop-filter:blur(15px);padding:12px 14px;border-radius:12px;
+  font:400 9px/1.5 "DM Mono",monospace;color:#666;text-align:left;
 }
-.f2  {
-  right:1%;
-  top:25%;
-  transform:translateZ(80px) rotateY(-17deg);
-  animation-delay:1s
+.hud b{color:#aaa;font-weight:500}.hud.one{left:4%;top:35%;animation:hud1 6s ease-in-out infinite}
+.hud.two{right:4%;top:42%;animation:hud2 7s ease-in-out infinite}
+@keyframes hud1{50%{transform:translate3d(10px,-15px,30px) rotate(-2deg)}}
+@keyframes hud2{50%{transform:translate3d(-12px,12px,30px) rotate(2deg)}}
+/* Content sections */
+.about{
+  width:min(1180px,100%)!important;max-width:none!important;margin:auto!important;
+  padding:120px 32px 60px!important;position:relative;
 }
-.f3  {
-  left:5%;
-  bottom:13%;
-  transform:translateZ(55px) rotateY(12deg);
-  animation-delay:2s
+.section-title{
+  font-size:clamp(42px,6vw,78px)!important;font-weight:850!important;
+  letter-spacing:-.065em!important;line-height:.9!important;margin-bottom:16px!important;
+  color:#f3f3f3!important;
 }
-@keyframes float  {
-  50%  {
-    translate:0 -13px
-  }
+.section-title-line{
+  width:52px!important;height:2px!important;background:#fff!important;margin:20px 0 50px!important;
 }
-.section  {
-  padding:20px 0 60px
+.about-grid{
+  display:grid!important;grid-template-columns:repeat(2,1fr)!important;gap:14px!important;
 }
-.section h2  {
-  text-align:center;
-  font-size:clamp(1.8rem,4vw,3rem);
-  margin:0 0 28px
+.about-card{
+  position:relative;overflow:hidden;min-height:280px;
+  padding:34px!important;border-radius:20px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.015))!important;
+  border:1px solid rgba(255,255,255,.09)!important;
+  box-shadow:0 30px 100px rgba(0,0,0,.45),inset 0 1px rgba(255,255,255,.06);
+  backdrop-filter:blur(20px);transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.2,.8,.2,1),border-color .4s,background .4s;
 }
-.cards  {
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:20px;
-  perspective:1100px
+.about-card:before{
+  content:"";position:absolute;width:240px;height:240px;border-radius:50%;
+  right:-130px;top:-130px;border:1px solid rgba(255,255,255,.07);
+  box-shadow:0 0 0 25px rgba(255,255,255,.012),0 0 0 50px rgba(255,255,255,.008);
 }
-.card  {
-  padding:30px;
-  border:1px solid var(--line);
-  border-radius:26px;
-  background:var(--glass);
-  backdrop-filter:blur(18px);
-  box-shadow:0 30px 65px #0008,inset 0 1px #fff2;
-  transition:transform .15s var(--ease),box-shadow .3s;
-  transform-style:preserve-3d
+.about-card:after{
+  content:"";position:absolute;left:-20%;right:-20%;top:-1px;height:1px;
+  background:linear-gradient(90deg,transparent,#fff,transparent);opacity:.18;
+  transform:translateX(-100%);transition:transform .7s;
 }
-.card:hover  {
-  box-shadow:0 40px 80px #000a,0 0 35px #58e7ff19
+.about-card:hover:after{transform:translateX(100%)}
+.about-card:hover{
+  transform:perspective(900px) rotateX(4deg) rotateY(-4deg) translateY(-8px)!important;
+  border-color:rgba(255,255,255,.18)!important;background:rgba(255,255,255,.06)!important;
 }
-.icon  {
-  font-size:2rem;
-  margin-bottom:14px
+.about-card-title{
+  font-size:22px!important;font-weight:750!important;letter-spacing:-.035em!important;
+  position:relative;z-index:2;
 }
-.card h3  {
-  margin:0 0 8px
+.about-card-title:before{
+  content:"01";display:block;margin-bottom:35px;color:#50515a;
+  font:500 10px "DM Mono",monospace;letter-spacing:.15em;
 }
-.card p,.cta p  {
-  margin:0;
-  color:var(--muted);
-  line-height:1.7
+.about-card:nth-child(2) .about-card-title:before{content:"02"}
+.about-card-text{font-size:14px!important;color:#797b84!important;line-height:1.75!important;max-width:450px;position:relative;z-index:2}
+/* CTA */
+.cta{
+  width:min(1180px,calc(100% - 64px))!important;max-width:none!important;
+  margin:60px auto 140px!important;padding:90px 30px!important;
+  position:relative;overflow:hidden;text-align:center;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(105,230,255,.09),transparent 38%),
+    linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.012))!important;
+  border:1px solid rgba(255,255,255,.1)!important;border-radius:28px!important;
+  box-shadow:0 45px 130px rgba(0,0,0,.6),inset 0 1px rgba(255,255,255,.07);
 }
-.cta  {
-  text-align:center;
-  margin-top:20px;
-  padding:45px 24px;
-  border:1px solid #58e7ff22;
-  border-radius:30px;
-  background:linear-gradient(135deg,#58e7ff0c,#a65cff0c);
-  box-shadow:0 35px 75px #0008
+.cta:before{
+  content:"";position:absolute;inset:-100px;
+  background:conic-gradient(from 0deg,transparent 0 75%,rgba(255,255,255,.08),transparent 86%);
+  animation:spin 9s linear infinite;
 }
-.footer  {
-  text-align:center;
-  color:var(--muted);
-  font-size:.78rem;
-  padding:25px
+@keyframes spin{to{transform:rotate(360deg)}}
+.cta>*{position:relative;z-index:2}
+.cta-title{font-size:clamp(38px,6vw,76px)!important;letter-spacing:-.065em!important;font-weight:850!important}
+.cta-text{max-width:560px;margin:22px auto 28px;color:#777983!important;font-size:14px!important;line-height:1.7!important}
+.cta-button{
+  padding:15px 22px!important;border-radius:11px!important;background:#f4f4f4!important;
+  color:#050505!important;border:0!important;font:700 11px "DM Mono",monospace!important;
 }
-.formWrap  {
-  min-height:72svh;
-  display:grid;
-  place-items:center;
-  perspective:1300px
+.cta-button:after{display:none!important}
+.home-footer{
+  background:#020202!important;border-top:1px solid rgba(255,255,255,.06)!important;
+  padding:55px 32px!important;margin:0!important;
 }
-.panel  {
-  width:min(480px,100%);
-  padding:clamp(26px,6vw,46px);
-  border:1px solid var(--line);
-  border-radius:29px;
-  background:#ffffff0b;
-  backdrop-filter:blur(22px);
-  box-shadow:0 45px 100px #000b,inset 0 1px #fff2;
-  transform-style:preserve-3d
+.home-footer-content{width:min(1180px,100%);margin:auto}
+.home-footer-top{margin:0!important;display:flex!important;justify-content:space-between!important}
+.home-footer-title{margin:0!important}.home-footer-copyright{font-size:11px!important;color:#555!important}
+.home-footer-link{font:400 10px "DM Mono",monospace!important;text-transform:uppercase;color:#555!important}
+/* Apply/success pages */
+.apply-page,.success-page{position:relative;isolation:isolate;background:#030303!important}
+.apply-page:before,.success-page:before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(circle at 50% 40%,rgba(103,222,255,.07),transparent 35%);
 }
-.panel h2  {
-  text-align:center;
-  margin:0 0 8px;
-  font-size:clamp(1.7rem,4vw,2.3rem)
+.form-container{max-width:570px!important}
+.header-title{font-size:clamp(40px,7vw,62px)!important;letter-spacing:-.06em!important}
+.header-subtitle{color:#777983!important;font-size:14px!important}
+.form-card,.success-card{
+  background:rgba(8,8,9,.7)!important;border:1px solid rgba(255,255,255,.1)!important;
+  border-radius:20px!important;box-shadow:0 40px 120px rgba(0,0,0,.55)!important;
 }
-.sub  {
-  text-align:center;
-  color:var(--muted);
-  line-height:1.6;
-  margin:0 0 25px
+.form-input{background:#030304!important;border-color:rgba(255,255,255,.09)!important;border-radius:11px!important}
+.form-input:focus{border-color:rgba(255,255,255,.38)!important;box-shadow:0 0 0 3px rgba(255,255,255,.035)!important}
+.submit-btn{border-radius:11px!important}
+.footer{background:#020202!important;border-color:rgba(255,255,255,.06)!important}
+/* responsive */
+@media(max-width:768px){
+  .home-nav,.top-nav{width:calc(100% - 20px)!important;margin-top:10px!important;top:10px!important}
+  .home-nav{padding:8px 8px 8px 13px!important}
+  .home-nav-links{gap:7px!important}.home-nav-link{display:none!important}
+  .apply-btn{font-size:10px!important;padding:11px 14px!important}
+  .zc-logo{width:94px!important}
+  .hero{min-height:calc(100svh - 72px)!important;padding:70px 20px 90px!important}
+  .hero-content{width:100%}.hero-title{font-size:clamp(57px,17vw,88px)!important}
+  .hero-subtitle{font-size:14px!important;line-height:1.7!important}
+  .hero-buttons{justify-content:flex-start!important}
+  .hero-btn-primary,.hero-btn-secondary{width:auto!important;font-size:10px!important;padding:0 15px!important}
+  .hud{display:none}
+  .about{padding:80px 18px 30px!important}
+  .section-title{font-size:clamp(43px,13vw,62px)!important}
+  .about-grid{grid-template-columns:1fr!important}
+  .about-card{min-height:230px!important;padding:27px!important}
+  .cta{width:calc(100% - 36px)!important;margin:45px auto 90px!important;padding:60px 20px!important}
+  .home-footer{padding:45px 18px!important}
+  .home-footer-top{flex-direction:column!important;gap:25px!important}
+  .home-footer-links{gap:12px!important;flex-wrap:wrap}
 }
-.field  {
-  margin-bottom:17px
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}
 }
-.field label  {
-  display:block;
-  color:#bdc9dd;
-  font-size:.78rem;
-  margin-bottom:7px
-}
-.field input  {
-  width:100%;
-  height:51px;
-  border:1px solid var(--line);
-  border-radius:13px;
-  background:#02071199;
-  color:var(--text);
-  padding:0 14px;
-  outline:none;
-  box-shadow:inset 0 3px 10px #0008;
-  transition:.3s
-}
-.field input:focus  {
-  border-color:var(--cyan);
-  box-shadow:0 0 0 3px #58e7ff18,0 0 25px #58e7ff16
-}
-.full  {
-  width:100%
-}
-.secure  {
-  text-align:center;
-  color:var(--muted);
-  font-size:.74rem;
-  margin:15px 0 0
-}
-.success  {
-  text-align:center
-}
-.check  {
-  width:94px;
-  height:94px;
-  margin:0 auto 20px;
-  border:1px solid #58e7ff66;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  color:var(--cyan);
-  font-size:3rem;
-  box-shadow:0 0 55px #58e7ff25,inset 0 0 30px #58e7ff0d;
-  animation:pop .8s var(--ease)
-}
-@keyframes pop  {
-  from  {
-    opacity:0;
-    transform:scale(.2) rotateY(180deg)
-  }
-  to  {
-    opacity:1;
-    transform:none
-  }
-}
-.swipeHint  {
-  position:fixed;
-  bottom:16px;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:10;
-  color:#74829b;
-  font-size:.68rem;
-  letter-spacing:.1em;
-  white-space:nowrap
-}
-.swipeHint b  {
-  color:#b7c4d9
-}
-@media(max-width:700px)  {
-  .nav  {
-    padding:8px
-  }
-  .navin  {
-    border-radius:15px;
-    padding:9px 10px 9px 13px
-  }
-  .btn  {
-    padding:10px 13px;
-    font-size:.82rem
-  }
-  .viewport  {
-    padding:88px 11px 45px
-  }
-  .hero  {
-    min-height:530px
-  }
-  .heroCard  {
-    border-radius:25px;
-    padding:44px 18px
-  }
-  .float  {
-    display:none
-  }
-  .cards  {
-    grid-template-columns:1fr
-  }
-  .card  {
-    padding:24px
-  }
-  .section  {
-    padding-bottom:45px
-  }
-}
-@media(max-width:420px)  {
-  .navlinks .btn:first-child  {
-    display:none
-  }
-  .hero h1  {
-    font-size:clamp(2.35rem,13vw,3.3rem)
-  }
-  .actions  {
-    flex-direction:column
-  }
-  .actions .btn  {
-    width:100%
-  }
-  .panel  {
-    padding:25px 18px
-  }
-}
-@media(prefers-reduced-motion:reduce)  {
-  *,*:before,*:after  {
-    animation:none!important;
-    transition:none!important
-  }
-  .swipeHint  {
-    display:none
-  }
-}
-</style> </head> <body> <div class="orb a"> </div> <div class="orb b"> </div> <nav class="nav"> <div class="navin"> <a class="logo" href="#" onclick="showPage('home');
-return false"> ZEN <b> CREW </b> </a> <div class="navlinks"> <button class="btn" onclick="showPage('home')"> Home </button> <button class="btn primary" onclick="showPage('apply')"> Apply </button> </div> </div> </nav> <main class="viewport" id="viewport"> <div class="deck"> <section class="page active" id="page-home"> <div class="hero" id="hero"> <div class="float f1"> &lt;
-/&gt;
-clean code </div> <div class="float f2"> 🚀 ship faster </div> <div class="float f3"> 🤝 grow together </div> <div class="heroCard" id="heroCard"> <span class="badge"> ✦ JOIN OUR COMMUNITY </span> <h1> A Crew Built for Modern Developers </h1> <p> Connect, collaborate, and grow with developers who share your passion for building amazing things. </p> <div class="actions"> <button class="btn primary" onclick="showPage('apply')"> Get Started → </button> <button class="btn" onclick="document.getElementById('about').scrollIntoView( {
-behavior:'smooth'}
+</style>
 
-)"> Explore Crew </button> </div> </div> </div> <section class="section" id="about"> <h2> More Than Just a Community </h2> <div class="cards"> <article class="card tilt"> <div class="icon"> 🤝 </div> <h3> Collaborative Growth </h3> <p> Technical precision meets a welcoming atmosphere. Build, debug and share with people who support your growth. </p> </article> <article class="card tilt"> <div class="icon"> 🧭 </div> <h3> Expert Mentorship </h3> <p> Connect with experienced developers, share knowledge and accelerate your journey from junior to senior. </p> </article> </div> </section> <section class="cta"> <h2> Ready to Join Zen Crew? </h2> <p> Become part of a community that values learning, growth and collaboration. </p> <div class="actions"> <button class="btn primary" onclick="showPage('apply')"> Apply to Zen Crew → </button> </div> </section> <footer class="footer"> © 2026 Zen Crew. All rights reserved. </footer> </section> <section class="page" id="page-apply"> <div class="formWrap"> <div class="panel"> <h2> Apply to Zen Crew </h2> <p class="sub"> Think Zen Crew is for you? Submit your application. It only takes a minute. </p> <form id="applicationForm" onsubmit="return submitForm(event)"> <div class="field"> <label for="fullName"> FULL NAME </label> <input id="fullName" name="fullName" autocomplete="name" required> </div> <div class="field"> <label for="email"> EMAIL ADDRESS </label> <input id="email" name="email" type="email" autocomplete="email" required> </div> <div class="field"> <label for="phone"> PHONE NUMBER </label> <input id="phone" name="phone" type="tel" autocomplete="tel" required> </div> <button class="btn primary full" id="submitBtn" type="submit"> Submit Application → </button> <p class="secure"> 🔒 Your information is secure and encrypted. </p> </form> </div> </div> </section> <section class="page" id="page-success"> <div class="formWrap"> <div class="panel success"> <div class="check"> ✓ </div> <h2> Application Submitted </h2> <p class="sub"> Your application has been received successfully. We'll review it and get back to you within 3–5 business days. </p> <button class="btn primary" onclick="showPage('home')"> Back to Home → </button> </div> </div> </section> </div> </main> <div class="swipeHint"> SWIPE <b> ← → </b> TO NAVIGATE </div> <script> /* KEEP YOUR EXISTING BACKEND URL. */ const APPSCRIPT_URL="YOUR_EXISTING_APPS_SCRIPT_URL_HERE";
-const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let current='home';
-function showPage(id) {
-  const old=document.querySelector('.page.active'),target=document.getElementById('page-'+id);
-  if(!target||target===old)return;
-  const order=['home','apply','success'],dir=order.indexOf(id)>order.indexOf(current)?'enter-left':'enter-right';
-  if(old)old.classList.remove('active');
-  target.classList.remove('enter-left','enter-right');
-  void target.offsetWidth;
-  target.classList.add('active',dir);
-  current=id;
-  scrollTo( {
-  top:0,behavior:reduced?'auto':'smooth'}
+</head>
+<body>
+<canvas id="zc-space" aria-hidden="true"></canvas>
+<div class="space-vignette" aria-hidden="true"></div>
+<div class="space-grid" aria-hidden="true"></div>
 
-)}
 
-if(!reduced&&matchMedia('(hover:hover) and (pointer:fine)').matches) {
-  const hero=document.getElementById('hero'),card=document.getElementById('heroCard');
-  hero.addEventListener('pointermove',e=> {
-    const r=hero.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
-    card.style.transform=`rotateY($ {
-    x*8}
+<!-- APPLY PAGE -->
+<div class="page apply-page">
+  <div class="bg-shader"></div>
+  <div class="apply-page-content">
+    <nav class="top-nav">
+      <a href="#" class="nav-brand">
+        <span>ZEN CREW</span>
+      </a>
+      <a href="#" class="nav-back" onclick="showPage('home'); return false;">
+        ← Back
+      </a>
+    </nav>
 
-    deg) rotateX($ {
-    -y*7}
+    <div class="apply-main">
+      <div class="form-container">
+        <div class="header-section">
+          <h1 class="header-title">Apply to Zen Crew</h1>
+          <p class="header-subtitle">Think Zen Crew is for you? Submit your application.<br>It only takes a minute.</p>
+        </div>
 
-  deg) translateZ(14px)`}
+        <div class="form-card">
+          <form class="form-group" id="applicationForm">
+            <!-- Full Name -->
+            <div class="form-field">
+              <label class="form-label">Full Name</label>
+              <div class="form-input-wrapper">
+                <div class="form-icon icon-user"></div>
+                <input 
+                  type="text" 
+                  class="form-input" 
+                  id="fullName" 
+                  placeholder="Your full name" 
+                  required
+                >
+              </div>
+            </div>
 
+            <!-- Email -->
+            <div class="form-field">
+              <label class="form-label">Email Address</label>
+              <div class="form-input-wrapper">
+                <div class="form-icon icon-email"></div>
+                <input 
+                  type="email" 
+                  class="form-input" 
+                  id="email" 
+                  placeholder="email@example.com" 
+                  required
+                >
+              </div>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-field">
+              <label class="form-label">Phone Number</label>
+              <div class="form-input-wrapper">
+                <div class="form-icon icon-phone"></div>
+                <input 
+                  type="tel" 
+                  class="form-input" 
+                  id="phone" 
+                  placeholder="+91 ***********" 
+                  required
+                >
+              </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+              Submit Application
+            </button>
+          </form>
+        </div>
+
+        <div class="security-notice">
+          <div class="security-icon"></div>
+          <span>Your information is secure and encrypted.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-text">© 2026 Zen Crew. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="#" class="footer-link">Privacy Policy</a>
+      <a href="#" class="footer-link">Terms of Service</a>
+    </div>
+  </footer>
+</div>
+
+<!-- SUCCESS PAGE -->
+<div class="page success-page">
+  <div class="success-bg-shader"></div>
+  <div class="success-overlay"></div>
+  <div class="success-container">
+    <div class="success-card">
+      <div class="success-icon-wrapper">
+        <div class="success-icon-box">
+          <div class="success-pulse"></div>
+          <div class="success-checkmark">✓</div>
+        </div>
+      </div>
+      <h2 class="success-title">Application Submitted</h2>
+      <p class="success-message">
+        Your application has been received successfully. We'll review it and get back to you within 3-5 business days.
+      </p>
+      <button class="success-button" onclick="showPage('home');">
+        Back to Home
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- HOME PAGE -->
+<div class="page home-page active">
+  <nav class="home-nav">
+    <div class="home-nav-brand"><img class="zc-logo" src="ZC.png" alt="ZEN CREW"></div>
+    <div class="home-nav-links">
+      <a href="#" class="home-nav-link">About</a>
+      <a href="#" class="home-nav-link">Features</a>
+      <a href="#" class="home-nav-link">Community</a>
+      <a href="#" class="home-nav-link">Pricing</a>
+      <button class="apply-btn" onclick="showPage('apply'); return false;">Apply Now</button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-bg-shape-1"></div>
+      <div class="hero-bg-shape-2"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">ZEN CREW / DEVELOPER × DESIGN COMMUNITY</div>
+      <h1 class="hero-title">BUILD<br><span class="hero-gradient">BEYOND.</span></h1>
+      <p class="hero-subtitle">
+        A high-signal community for developers and designers who turn ideas into products. Learn, build, ship, and grow with people who care about the craft.
+      </p>
+      <div class="hero-buttons">
+        <button class="hero-btn-primary" onclick="showPage('apply'); return false;">Get Started</button>
+        <button class="hero-btn-secondary" onclick="document.querySelector('.about').scrollIntoView({behavior:'smooth'})">EXPLORE CREW</button>
+      </div>
+    </div>
+
+    <div class="hud one">STATUS<br><b>● OPEN FOR BUILDERS</b><br>NODE / ZC-01</div>
+    <div class="hud two">STACK<br><b>CODE + DESIGN + AI</b><br>SHIP / REPEAT</div>
+    <div class="hero-scroll">SCROLL TO EXPLORE</div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about">
+    <div>
+      <h2 class="section-title">More Than Just a Community</h2>
+      <div class="section-title-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-card">
+        <h3 class="about-card-title">Collaborative Growth</h3>
+        <p class="about-card-text">
+          Here, technical precision meets a welcoming atmosphere. Whether you're debugging a complex architecture or sharing your first side project, you'll find a crew ready to support your growth.
+        </p>
+      </div>
+      <div class="about-card">
+        <h3 class="about-card-title">Expert Mentorship</h3>
+        <p class="about-card-text">
+          Connect with seasoned developers who've been where you are. Get guidance, share knowledge, and accelerate your journey from junior to senior engineer.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <h2 class="cta-title">Ready to Join Zen Crew?</h2>
+    <p class="cta-text">
+      Become part of a community that values learning, growth, and collaboration. Your application takes just one minute.
+    </p>
+    <button class="cta-button" onclick="showPage('apply'); return false;">
+      Apply to Zen Crew
+    </button>
+  </section>
+
+  <!-- Footer -->
+  <footer class="home-footer">
+    <div class="home-footer-content">
+      <div class="home-footer-top">
+        <div class="home-footer-brand">
+          <h3 class="home-footer-title"><img class="zc-logo" src="ZC.png" alt="ZEN CREW"></h3>
+          <p class="home-footer-copyright">© 2026 Zen Crew. All rights reserved.</p>
+        </div>
+        <div class="home-footer-links">
+          <a href="#" class="home-footer-link">Privacy Policy</a>
+          <a href="#" class="home-footer-link">Terms of Service</a>
+          <a href="#" class="home-footer-link">Code of Conduct</a>
+          <a href="#" class="home-footer-link">Join Discord</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+
+<script type="module">
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+
+const canvas=document.getElementById("zc-space");
+if(canvas){
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,.1,100);
+  camera.position.set(0,0,8);
+
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+
+  const world=new THREE.Group();
+  scene.add(world);
+
+  // Central crystalline object
+  const core=new THREE.Mesh(
+    new THREE.IcosahedronGeometry(1.15,2),
+    new THREE.MeshPhysicalMaterial({
+      color:0x9bbcff,metalness:.72,roughness:.13,
+      transmission:.12,transparent:true,opacity:.72
+    })
   );
-  hero.addEventListener('pointerleave',()=>card.style.transform='');
-  document.querySelectorAll('.tilt').forEach(el=> {
-    el.addEventListener('pointermove',e=> {
-      const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
-      el.style.transform=`perspective(900px) rotateY($ {
-      x*8}
+  world.add(core);
 
-      deg) rotateX($ {
-      -y*8}
+  const wire=new THREE.Mesh(
+    new THREE.IcosahedronGeometry(1.42,2),
+    new THREE.MeshBasicMaterial({color:0x7de8ff,wireframe:true,transparent:true,opacity:.20})
+  );
+  world.add(wire);
 
-    deg) translateY(-6px)`}
-
+  for(let i=0;i<5;i++){
+    const ring=new THREE.Mesh(
+      new THREE.TorusGeometry(1.8+i*.27,.008+(i%2)*.006,8,180),
+      new THREE.MeshBasicMaterial({
+        color:i%2?0x9d7dff:0x72e8ff,transparent:true,opacity:.36
+      })
     );
-  el.addEventListener('pointerleave',()=>el.style.transform='')}
+    ring.rotation.set(Math.random()*2,Math.random()*2,Math.random()*2);
+    ring.userData.s=(i%2?1:-1)*(.0014+i*.00025);
+    world.add(ring);
+  }
 
-)}
+  // Dense star field
+  const N=1900, p=new Float32Array(N*3);
+  for(let i=0;i<N;i++){
+    const r=10+Math.random()*15;
+    const a=Math.random()*Math.PI*2;
+    const y=(Math.random()-.5)*22;
+    p[i*3]=Math.cos(a)*r;
+    p[i*3+1]=y;
+    p[i*3+2]=Math.sin(a)*r-5;
+  }
+  const sg=new THREE.BufferGeometry();
+  sg.setAttribute("position",new THREE.BufferAttribute(p,3));
+  const stars=new THREE.Points(sg,new THREE.PointsMaterial({
+    color:0xc9d8ff,size:.022,transparent:true,opacity:.62
+  }));
+  scene.add(stars);
 
-let sx=0,sy=0;
-const vp=document.getElementById('viewport');
-vp.addEventListener('touchstart',e=> {
-  sx=e.changedTouches[0].clientX;
-sy=e.changedTouches[0].clientY}
+  // Thin orbital "signal" arcs
+  const arcGroup=new THREE.Group();
+  for(let i=0;i<12;i++){
+    const pts=[];
+    for(let j=0;j<90;j++){
+      const a=j/89*Math.PI*2;
+      const r=2.25+Math.sin(a*3+i)*.025;
+      pts.push(new THREE.Vector3(Math.cos(a)*r,Math.sin(a)*r*.28,0));
+    }
+    const g=new THREE.BufferGeometry().setFromPoints(pts);
+    const l=new THREE.Line(g,new THREE.LineBasicMaterial({
+      color:i%3===0?0x72e8ff:0x777777,transparent:true,opacity:i%3===0?.16:.045
+    }));
+    l.rotation.set(Math.random()*2,Math.random()*2,Math.random()*2);
+    arcGroup.add(l);
+  }
+  world.add(arcGroup);
 
-, {
-passive:true}
+  let mx=0,my=0,sx=0,sy=0;
+  addEventListener("pointermove",e=>{
+    mx=(e.clientX/innerWidth-.5);
+    my=(e.clientY/innerHeight-.5);
+  },{passive:true});
 
-);
-vp.addEventListener('touchend',e=> {
-  const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
-  if(Math.abs(dx) <70||Math.abs(dx)<Math.abs(dy)*1.2)return;
-  const p=['home','apply','success'],i=p.indexOf(current);
-  if(dx<0&&i<p.length-1)showPage(p[i+1]);
-if(dx> 0&&i>0)showPage(p[i-1])}
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function frame(t){
+    requestAnimationFrame(frame);
+    const time=t*.001;
+    sx+=(mx*.65-sx)*.035;
+    sy+=(my*.42-sy)*.035;
 
-, {
-passive:true}
+    world.position.x=sx;
+    world.position.y=-sy;
+    world.rotation.y+=reduce?0:.0018;
+    world.rotation.x+=(my*.08-world.rotation.x)*.018;
+    core.rotation.x+=reduce?0:.0012;
+    core.rotation.z+=reduce?0:.0008;
+    wire.rotation.y-=reduce?0:.0015;
+    arcGroup.rotation.z+=reduce?0:.00045;
+    stars.rotation.y+=reduce?0:.00012;
 
-);
-function submitForm(e) {
+    const pulse=1+Math.sin(time*1.4)*.028;
+    core.scale.setScalar(pulse);
+    renderer.render(scene,camera);
+  }
+  requestAnimationFrame(frame);
+
+  addEventListener("resize",()=>{
+    camera.aspect=innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+    renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));
+  });
+}
+</script>
+
+<script>
+// Configuration
+const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZdv1Tc7T59BBLu3vrYdmp4swoVia4YQmU_dHWNkPreQzupAAqE6cxAd3-QZpA9hH_/exec';
+
+// Page Navigation
+function showPage(pageName) {
+  const pages = document.querySelectorAll('.page');
+  pages.forEach(page => page.classList.remove('active'));
+  
+  if (pageName === 'apply') {
+    document.querySelector('.apply-page').classList.add('active');
+  } else if (pageName === 'success') {
+    document.querySelector('.success-page').classList.add('active');
+  } else if (pageName === 'home') {
+    document.querySelector('.home-page').classList.add('active');
+  }
+}
+
+// Form Submission
+const form = document.getElementById('applicationForm');
+const submitBtn = document.getElementById('submitBtn');
+
+form.addEventListener('submit', function(e) {
   e.preventDefault();
-  const fullName=document.getElementById('fullName').value.trim(),email=document.getElementById('email').value.trim(),phone=document.getElementById('phone').value.trim();
-  if(!fullName||!email||!phone)return false;
-  const btn=document.getElementById('submitBtn');
-  btn.disabled=true;
-  btn.textContent='Submitting...';
-  fetch(APPSCRIPT_URL, {
-    method:'POST',headers: {
-    'Content-Type':'application/x-www-form-urlencoded'}
+  
+  const fullName = document.getElementById('fullName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
 
-    ,body:new URLSearchParams( {
-    fullName,email,phone}
+  // Validation
+  if (!fullName || !email || !phone) {
+    showToast('Please fill in all fields', 'error');
+    return;
+  }
 
-  )}
+  // Submit form
+  submitForm(fullName, email, phone);
+});
 
-  ).then(()=>showPage('success')).catch(()=>showPage('success')).finally(()=> {
-    btn.disabled=false;
-    btn.textContent='Submit Application →';
-  document.getElementById('applicationForm').reset()}
+function submitForm(name, email, phone) {
+  // Disable button during submission
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
 
-  );
-return false}
+  // Build URL with GET parameters
+  const url = APPSCRIPT_URL + '?' + new URLSearchParams({
+    name: name,
+    email: email,
+    phone: phone
+  });
 
-</script> </body> </html>
+  // Fetch with GET and no-cors
+  fetch(url, {
+    method: 'GET',
+    mode: 'no-cors'
+  })
+    .then(() => {
+      // Success - no response parsing needed with no-cors
+      showToast('Application submitted successfully!', 'success');
+      
+      // Clear form
+      form.reset();
+      
+      // Wait 1 second then show success page
+      setTimeout(() => {
+        showPage('success');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Application';
+      }, 1000);
+    })
+    .catch(() => {
+      // Error handling
+      showToast('There was an error submitting your application. Please try again.', 'error');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Application';
+    });
+}
+
+// Toast Notification
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 4000);
+}
+
+// Email validation
+document.getElementById('email').addEventListener('change', function() {
+  const email = this.value.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (email && !emailRegex.test(email)) {
+    showToast('Please enter a valid email address', 'error');
+  }
+});
+</script>
+
+</body>
+</html>
